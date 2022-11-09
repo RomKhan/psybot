@@ -21,6 +21,7 @@ repos:
       - id: pretty-format-json
         args:
           - --autofix
+          - --no-ensure-ascii
       - id: requirements-txt-fixer
       - id: trailing-whitespace
 
