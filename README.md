@@ -8,6 +8,13 @@ $ echo 'API_TOKEN=something' > .env
 $ ./run.sh
 ```
 
+## Install pre-commit hooks
+
+```console
+$ pip install pre-commit
+$ pre-commit install
+```
+
 ---
 ### Team members:
 *  [Konstantin Borisov](https://github.com/cortan122)
