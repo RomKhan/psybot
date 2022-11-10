@@ -4,7 +4,8 @@
 ## Starting the bot
 
 ```console
-$ echo 'API_TOKEN=something' > .env
+$ echo 'API_TOKEN=something' >> .env
+$ echo 'DATABASE_URI=something' >> .env
 $ ./run.sh
 ```
 

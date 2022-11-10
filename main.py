@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
 import logging
-import os
 
 from aiogram import Bot, Dispatcher, executor, types
 
-API_TOKEN = os.getenv("API_TOKEN")
+from src.environment import API_TOKEN
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
