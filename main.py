@@ -5,6 +5,7 @@ import logging
 from aiogram import Bot, Dispatcher, executor, types
 
 from src.environment import API_TOKEN
+from src.statemachine import next_state
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -14,21 +15,10 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
 
-@dp.message_handler(commands=["start", "help"])
-async def send_welcome(message: types.Message):
-    """
-    This handler will be called when user sends `/start` or `/help` command
-    """
-    await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
-
-
 @dp.message_handler()
 async def echo(message: types.Message):
-    print(message)
-    # old style:
-    # await bot.send_message(message.chat.id, message.text)
-
-    await message.answer(message.text)
+    state = next_state(message)
+    await message.answer(state.get_message(), reply_markup=state.get_buttons())
 
 
 if __name__ == "__main__":

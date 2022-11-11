@@ -40,6 +40,8 @@ repos:
     rev: 5.10.1
     hooks:
     - id: isort
+      args:
+        - --line-length=100
 
   - repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9

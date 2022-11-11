@@ -1,0 +1,28 @@
+{
+  "buttons": [
+    [
+      "Тесты",
+      "Статьи",
+      "Техники"
+    ],
+    [
+      "Факты",
+      "Рекомендации"
+    ],
+    [
+      "Настройки",
+      "Подписка"
+    ]
+  ],
+  "message": "Привет! Это предварительное сообщения для главного меню бота Psychological Essence. Ты можешь нажимать на кнопочки, чтобы попасть в дригие отделы бота.",
+  "transitions": {
+    "/start": "Start",
+    "Настройки": "NotImplemented",
+    "Подписка": "NotImplemented",
+    "Рекомендации": "NotImplemented",
+    "Статьи": "NotImplemented",
+    "Тесты": "NotImplemented",
+    "Техники": "NotImplemented",
+    "Факты": "NotImplemented"
+  }
+}
