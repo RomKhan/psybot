@@ -1,10 +1,13 @@
 from .BaseState import BaseState
-from .NotImplementedState import NotImplementedState
-from .StartState import StartState
 
-__all__ = ["StartState", "BaseState", "NotImplementedState"]
+__all__ = ["BaseState"]
+
+
+def make_state(name: str):
+    return type(f"{name}State", (BaseState,), {"name": name})
+
 
 states_by_name: dict[str, type[BaseState]] = {
-    "Start": StartState,
-    "NotImplemented": NotImplementedState,
+    "Start": make_state("Start"),
+    "NotImplemented": make_state("NotImplemented"),
 }
