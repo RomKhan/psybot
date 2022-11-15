@@ -37,12 +37,12 @@ class FactState(BaseState):
         self.page_number = 0  # todo
 
     def print_fact(self) -> str:
-        return f"Факт №{self.fact_number}\n\n{facts[self.fact_number]}"
+        return f"Факт №{self.fact_number+1}\n\n{facts[self.fact_number]}"
 
     def print_page(self) -> str:
         res = []
         for i, fact in get_page(self.page_number):
-            res.append(f"{i}. {fact}")
+            res.append(f"{i+1}. {fact}")
         return "\n".join(res)
 
     def next_state(self) -> str | None:
@@ -53,7 +53,9 @@ class FactState(BaseState):
 
     def get_message(self) -> str:
         if self.text.isdigit():
-            self.fact_number = int(self.text)
+            self.fact_number = int(self.text) - 1
+            if self.fact_number < 0 or self.fact_number >= len(facts):
+                return oops_message
             return self.print_fact()
 
         match self.text:
