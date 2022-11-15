@@ -1,7 +1,7 @@
 from aiogram.types import Message
 
 from .database import session
-from .models import ActionLog, User
+from .models import User
 from .states import BaseState, states_by_name
 
 
@@ -19,23 +19,17 @@ def get_user(message: Message) -> User:
 
 def next_state(message: Message) -> BaseState:
     user = get_user(message)
-    state = states_by_name[user.state_name]()
-    name = state.next_state(message.text)
+    state = states_by_name[user.state_name](user, message.text)
+    name = state.next_state()
 
-    if name in states_by_name:
-        user.state_name = name
-        next_state = states_by_name[name]()
-        session.add(
-            ActionLog(
-                user_id=user.id,
-                message_unix_time=user.message_unix_time,
-                old_state_name=user.state_name,
-                new_state_name=name,
-            )
-        )
+    if isinstance(name, str) and name in states_by_name:
+        next_state = states_by_name[name](user, message.text)
+        session.add(next_state.log())
     else:
         next_state = state
         state.message = "Что-то пошло нетак!"  # todo
+        session.add(next_state.log("/error"))
 
+    user.state_name = next_state.name
     session.commit()
     return next_state

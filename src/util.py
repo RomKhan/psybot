@@ -17,11 +17,11 @@ ReplyMarkupType = typing.Union[
 
 
 @lru_cache
-def load_data_file(type: str, name: str) -> dict:
+def load_data_file(type: str, name: str) -> dict[str, typing.Any]:
     path = join(DATA_DIR, type, name + ".json")
     with open(path, "r") as f:
         return json.load(f)
 
 
-def flatten(l: list[list]):
+def flatten(l: typing.Collection[typing.Collection]):
     return [item for sublist in l for item in sublist]

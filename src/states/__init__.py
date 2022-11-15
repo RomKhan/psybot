@@ -1,6 +1,7 @@
 from .BaseState import BaseState
+from .FactState import FactState
 
-__all__ = ["BaseState"]
+__all__ = ["BaseState", "FactState"]
 
 
 def make_state(name: str):
@@ -10,4 +11,5 @@ def make_state(name: str):
 states_by_name: dict[str, type[BaseState]] = {
     "Start": make_state("Start"),
     "NotImplemented": make_state("NotImplemented"),
+    "Facts": FactState,
 }
