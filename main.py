@@ -18,7 +18,9 @@ dp = Dispatcher(bot)
 @dp.message_handler()
 async def echo(message: types.Message):
     state = next_state(message)
-    await message.answer(state.get_message(), reply_markup=state.get_buttons())
+    await message.answer(
+        state.get_message(), reply_markup=state.get_buttons(), disable_web_page_preview=True
+    )
 
 
 if __name__ == "__main__":

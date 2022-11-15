@@ -28,7 +28,7 @@ class BaseState:
     def get_buttons(self) -> ReplyMarkupType:
         if self.buttons is not None:
             return ReplyKeyboardMarkup(
-                keyboard=[[KeyboardButton(text=e) for e in l] for l in self.buttons],
+                keyboard=[[KeyboardButton(text=e) for e in list] for list in self.buttons],
                 resize_keyboard=True,
             )
         else:

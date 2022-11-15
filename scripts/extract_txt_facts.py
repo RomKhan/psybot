@@ -11,11 +11,13 @@ with open("Факты Psychological Essence.txt", encoding="utf-8-sig") as file:
         if re.match(r"^[а-яё]+$", line, re.IGNORECASE):
             res[line] = arr = []
         elif m := re.match(r"^[0-9]+\. ", line):
-            if arr:
-                arr[-1] = re.sub(r"\n+", "\n\n", arr[-1].strip())
             match_len = m.span()[1]
             arr.append(line[match_len:] + "\n")
         else:
             arr[-1] += line + "\n"
+
+for k in res:
+    for i in range(len(res[k])):
+        res[k][i] = re.sub(r"\n+", "\n\n", res[k][i].strip())
 
 json.dump(res, open("data/facts.json", "w"), ensure_ascii=False, indent=2)

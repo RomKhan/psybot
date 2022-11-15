@@ -15,6 +15,8 @@ ReplyMarkupType = typing.Union[
     None,
 ]
 
+oops_message = "Что-то пошло нетак!🙄😱"
+
 
 @lru_cache
 def load_data_file(type: str, name: str) -> dict[str, typing.Any]:
@@ -23,5 +25,5 @@ def load_data_file(type: str, name: str) -> dict[str, typing.Any]:
         return json.load(f)
 
 
-def flatten(l: typing.Collection[typing.Collection]):
-    return [item for sublist in l for item in sublist]
+def flatten(list: typing.Collection[typing.Collection]):
+    return [item for sublist in list for item in sublist]

@@ -3,6 +3,7 @@ from aiogram.types import Message
 from .database import session
 from .models import User
 from .states import BaseState, states_by_name
+from .util import oops_message
 
 
 def get_user(message: Message) -> User:
@@ -27,7 +28,7 @@ def next_state(message: Message) -> BaseState:
         session.add(next_state.log())
     else:
         next_state = state
-        state.message = "Что-то пошло нетак!"  # todo
+        state.message = oops_message
         session.add(next_state.log("/error"))
 
     user.state_name = next_state.name
