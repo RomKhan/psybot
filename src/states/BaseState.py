@@ -15,7 +15,7 @@ class BaseState:
 
     def __init__(self, user: User, text: str) -> None:
         self.user = user
-        self.text = text
+        self.text = text.strip()
 
         data = load_data_file("states", self.name)
         self.message = data["message"]
@@ -46,4 +46,5 @@ class BaseState:
             message_unix_time=self.user.message_unix_time,
             old_state_name=self.user.state_name,
             new_state_name=next_name,
+            button_text=self.text,
         )

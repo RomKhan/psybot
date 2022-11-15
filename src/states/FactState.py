@@ -5,7 +5,7 @@ from ..models import User
 from ..util import flatten, load_data_file, oops_message
 from .BaseState import BaseState
 
-PAGE_SIZE = 15
+PAGE_SIZE = 7
 
 
 def get_headline(fact: str) -> str:
@@ -34,7 +34,13 @@ class FactState(BaseState):
         super().__init__(user, text)
 
         self.fact_number = randint(0, len(facts) - 1)
-        self.page_number = 0  # todo
+        self.page_number = user.fact_page_number or 0
+
+        match self.text:
+            case "Предыдущая страница":
+                user.fact_page_number = self.page_number - 1
+            case "Следующая страница":
+                user.fact_page_number = self.page_number + 1
 
     def print_fact(self) -> str:
         return f"Факт №{self.fact_number+1}\n\n{facts[self.fact_number]}"

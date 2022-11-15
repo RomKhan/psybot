@@ -9,3 +9,4 @@ class ActionLog(TimestampMixin, Base):
     message_unix_time = Column(Integer, nullable=False)
     old_state_name = Column(String(255), nullable=False)
     new_state_name = Column(String(255), nullable=False)
+    button_text = Column(String(255), nullable=False)
