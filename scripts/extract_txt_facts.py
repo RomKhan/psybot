@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# todo:
+# gapi dl https://docs.google.com/document/d/1qdb3pkK0xR7KD7zAMJiKCXj63Wf7chkHv-JeFTEMeV8
+
 import json
 import re
 
@@ -20,4 +23,6 @@ for k in res:
     for i in range(len(res[k])):
         res[k][i] = re.sub(r"\n+", "\n\n", res[k][i].strip())
 
-json.dump(res, open("data/facts.json", "w"), ensure_ascii=False, indent=2)
+with open("data/facts.json", "w") as f:
+    json.dump(res, f, ensure_ascii=False, indent=2, sort_keys=True)
+    f.write("\n")
