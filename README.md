@@ -16,6 +16,10 @@ $ pip install pre-commit
 $ pre-commit install
 ```
 
+## Todo list
+
+- [ ] Standardize the use of en, em and ascii dashes in [facts.json](/data/facts.json)
+
 ---
 ### Team members:
 *  [Konstantin Borisov](https://github.com/cortan122)
