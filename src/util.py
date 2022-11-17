@@ -15,7 +15,7 @@ ReplyMarkupType = typing.Union[
     None,
 ]
 
-oops_message = "Что-то пошло нетак!🙄😱"
+oops_message = "Что-то пошло не так!🙄😱"
 
 
 @lru_cache

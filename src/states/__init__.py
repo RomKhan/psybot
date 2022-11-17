@@ -1,8 +1,16 @@
 from .BaseState import BaseState
 from .BookRecommendationState import BookRecommendationState
 from .FactState import FactState
+from .FilmRecommendationState import FilmRecommendationState
+from .SeriesRecommendationState import SeriesRecommendationState
 
-__all__ = ["BaseState", "FactState", "BookRecommendationState"]
+__all__ = [
+    "BaseState",
+    "FactState",
+    "BookRecommendationState",
+    "SeriesRecommendationState",
+    "FilmRecommendationState",
+]
 
 
 def make_state(name: str):
@@ -15,4 +23,6 @@ states_by_name: dict[str, type[BaseState]] = {
     "Recommendations": make_state("Recommendations"),
     "Facts": FactState,
     "BookRecommendations": BookRecommendationState,
+    "SeriesRecommendations": SeriesRecommendationState,
+    "FilmRecommendations": FilmRecommendationState,
 }
