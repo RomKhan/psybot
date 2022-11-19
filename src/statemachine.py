@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from aiogram.types import Message
 
 from .database import session
@@ -6,9 +8,8 @@ from .states import BaseState, states_by_name
 from .util import oops_message
 
 
-def get_user(message: Message) -> User:
-    id = message.from_id
-    timestamp = round(message.date.timestamp())
+def get_user(id: int, date: datetime) -> User:
+    timestamp = round(date.timestamp())
     user: User | None = session.query(User).get(id)
     if user is not None:
         user.message_unix_time = timestamp
@@ -18,13 +19,17 @@ def get_user(message: Message) -> User:
     return user
 
 
-def next_state(message: Message) -> BaseState:
-    user = get_user(message)
-    state = states_by_name[user.state_name](user, message.text)
+def get_user_msg(message: Message) -> User:
+    return get_user(message.from_id, message.date)
+
+
+def next_state(text: str, from_id: int, date: datetime):
+    user = get_user(from_id, date)
+    state = states_by_name[user.state_name](user, text)
     name = state.next_state()
 
     if isinstance(name, str) and name in states_by_name:
-        next_state = states_by_name[name](user, message.text)
+        next_state = states_by_name[name](user, text)
         session.add(next_state.log())
     else:
         next_state = state
@@ -34,3 +39,7 @@ def next_state(message: Message) -> BaseState:
     user.state_name = next_state.name
     session.commit()
     return next_state
+
+
+def next_state_msg(message: Message) -> BaseState:
+    return next_state(message.text, message.from_id, message.date)
