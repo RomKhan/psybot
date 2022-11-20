@@ -9,6 +9,13 @@ $ echo 'DATABASE_URI=something' >> .env
 $ ./run.sh
 ```
 
+## Building (and running) docker container
+
+```console
+$ docker build -t psy-essence-bot .
+$ docker run --env-file .env psy-essence-bot
+```
+
 ## Install pre-commit hooks
 
 ```console
