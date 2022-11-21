@@ -22,7 +22,7 @@ for file in os.listdir(CONTENT_DIR):
     obj.pop("omit_header_text", None)
     obj["category"] = obj.pop("description")
     obj["content"] = re.sub(r"^#[^\n]+\n", "", article.content.strip()).strip()
-    obj["url"] = "/articles/" + re.sub(r"[^а-яёa-z]", "-", file.replace(".md", "").lower()) + "/"
+    obj["url"] = "/articles/" + re.sub(r"[^а-яёa-z]+", "-", file.replace(".md", "").lower()) + "/"
 
     dir = f"data/articles/{obj['category']}/"
     os.makedirs(dir, exist_ok=True)
