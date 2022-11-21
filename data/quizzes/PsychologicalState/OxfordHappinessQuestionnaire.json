@@ -1,5 +1,7 @@
 {
+  "category": "PsychologicalState",
   "desc": "Методика предназначена для измерения счастья в целом. Опросник состоит из 29 вопросов.",
+  "filename": "OxfordHappinessQuestionnaire",
   "name": "Оксфордский опросник счастья",
   "questions": [
     "Я не особенно доволен/льна тем, как я живу.",
