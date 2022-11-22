@@ -24,17 +24,19 @@ jobs:
       with:
         fetch-depth: 2
 
+    - uses: tj-actions/changed-files@v34
+      id: changed-files
+      with:
+        files: data/**
+
     - uses: actions/setup-python@v3
+      if: steps.changed-files.outputs.any_changed == 'true'
       with:
         python-version: '3.10'
         cache: 'pip' # caching pip dependencies
 
     - run: pip install -r requirements.txt
-
-    - uses: tj-actions/changed-files@v34
-      id: changed-files
-      with:
-        files: data/**
+      if: steps.changed-files.outputs.any_changed == 'true'
 
     - run: ./scripts/upload_sql_data.py
       if: steps.changed-files.outputs.any_changed == 'true'
