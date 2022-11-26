@@ -1,6 +1,7 @@
 import os
 
+from quizlib.environment import ARTICLES_SITE, DATA_DIR
+
 API_TOKEN = os.environ["API_TOKEN"]
-DATA_DIR = os.environ.get("DATA_DIR", "./data/")
-ARTICLES_SITE = os.environ["ARTICLES_SITE"]
-WORDS_PER_MINUTE = int(os.environ.get("WORDS_PER_MINUTE", "200"))
+
+__all__ = ["API_TOKEN", "ARTICLES_SITE", "DATA_DIR"]
