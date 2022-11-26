@@ -27,7 +27,9 @@ jobs:
     - uses: tj-actions/changed-files@v34
       id: changed-files
       with:
-        files: data/**
+        files: |
+          data/**
+          scripts/upload_sql_data.py
 
     - uses: actions/setup-python@v3
       if: steps.changed-files.outputs.any_changed == 'true'
