@@ -36,6 +36,7 @@ jobs:
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.PIP_SSH_KEY }}
+        known_hosts: unnecessary
 
     - uses: actions/setup-python@v3
       if: steps.changed-files.outputs.any_changed == 'true' || github.run_attempt > 1
