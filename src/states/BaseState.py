@@ -64,3 +64,6 @@ class BaseState:
             new_state_name=next_name,
             button_text=self.text,
         )
+
+    def set_substate(self, *args):
+        print(f"WARNING: state {self.name} is not supposed to have extra args")

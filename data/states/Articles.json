@@ -1,0 +1,17 @@
+{
+  "buttons": [
+    [
+      "PLACEHOLDER"
+    ],
+    [
+      "Назад"
+    ]
+  ],
+  "inline_buttons": true,
+  "message": "Выберите категирию статьи",
+  "transitions": {
+    "/start": "Start",
+    "PLACEHOLDER": "NotImplemented",
+    "Назад": "Start"
+  }
+}
