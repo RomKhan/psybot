@@ -31,17 +31,23 @@ jobs:
           data/**
           scripts/upload_sql_data.py
 
+    - name: Install SSH key
+      if: steps.changed-files.outputs.any_changed == 'true' || github.run_attempt > 1
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.PIP_SSH_KEY }}
+
     - uses: actions/setup-python@v3
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true' || github.run_attempt > 1
       with:
         python-version: '3.10'
         cache: 'pip' # caching pip dependencies
 
     - run: pip install -r requirements.txt
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true' || github.run_attempt > 1
 
     - run: ./scripts/upload_sql_data.py
-      if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true' || github.run_attempt > 1
       env:
         API_TOKEN: ${{ secrets.API_TOKEN }}
         ARTICLES_SITE: ${{ secrets.ARTICLES_SITE }}
