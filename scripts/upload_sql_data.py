@@ -3,6 +3,7 @@
 import json
 from datetime import date
 from glob import glob
+from urllib.parse import urljoin
 
 from quizlib.database import engine, session
 from quizlib.environment import ARTICLES_SITE, DATA_DIR, ECHO_SQL, QUIZ_DIR, WORDS_PER_MINUTE
@@ -19,10 +20,10 @@ for file in glob(f"{DATA_DIR}/articles/*/*.json"):
         del obj["docx_url"]
         obj["date"] = date.fromisoformat(obj["date"])
         obj["reading_time"] = round(len(obj["content"].split()) / WORDS_PER_MINUTE)
-        obj["article_url"] = ARTICLES_SITE + obj.pop("url")
+        obj["article_url"] = urljoin(ARTICLES_SITE, obj.pop("url"))
 
         if "featured_image" in obj:
-            obj["image_url"] = ARTICLES_SITE + obj.pop("featured_image")
+            obj["image_url"] = urljoin(ARTICLES_SITE, obj.pop("featured_image"))
 
         key = (obj["category"], obj["title"])
         if key in articles_dict:

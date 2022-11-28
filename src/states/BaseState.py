@@ -51,7 +51,10 @@ class BaseState:
             )
 
     def next_state(self) -> str | None:
-        return self.transitions.get(self.text)
+        res = self.transitions.get(self.text)
+        if res == "THIS":
+            return self.name
+        return res
 
     def log(self, next_name: str | None = None) -> ActionLog:
         if next_name is None:
@@ -65,5 +68,5 @@ class BaseState:
             button_text=self.text,
         )
 
-    def set_substate(self, *args):
+    def set_substate(self, *args: str):
         print(f"WARNING: state {self.name} is not supposed to have extra args")

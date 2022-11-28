@@ -35,7 +35,7 @@ def deserialize_state(name: str, user: User, text: str):
     arr = name.split("/")
     res = states_by_name[arr[0]](user, text)
     if len(arr) > 1:
-        res.set_substate(*arr[:1])
+        res.set_substate(*arr[1:])
     return res
 
 

@@ -1,4 +1,4 @@
-from .ArticleState import ArticleState
+from .ArticleState import ArticleCategoryState, ArticleState
 from .BaseState import BaseState
 from .BookRecommendationState import BookRecommendationState
 from .FactState import FactState
@@ -28,4 +28,5 @@ states_by_name: dict[str, type[BaseState]] = {
     "SeriesRecommendations": SeriesRecommendationState,
     "FilmRecommendations": FilmRecommendationState,
     "Articles": ArticleState,
+    "ArticleCategory": ArticleCategoryState,
 }

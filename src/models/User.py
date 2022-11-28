@@ -8,3 +8,6 @@ class User(TimestampMixin, Base):
     message_unix_time = Column(Integer, nullable=False)
     state_name = Column(String(255), nullable=False)
     page_number = Column(Integer, nullable=True)
+
+    def is_subscribed(self) -> bool:
+        return True  # todo
