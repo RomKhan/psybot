@@ -1,3 +1,4 @@
+# todo: not actually pre commit
 name: pre-commit
 
 on:
