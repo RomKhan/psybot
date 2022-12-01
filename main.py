@@ -2,12 +2,11 @@
 
 import asyncio
 import logging
-from datetime import datetime
 
 from aiogram import Bot, Dispatcher, executor, types
 
 from src.environment import API_TOKEN
-from src.statemachine import next_state, next_state_msg
+from src.statemachine import next_state_msg, process_event
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -19,21 +18,21 @@ dp = Dispatcher(bot)
 
 @dp.callback_query_handler()
 async def handle_inline_keyboard(query: types.CallbackQuery):
-    state = next_state(query.data, query.from_user.id, datetime.now())
+    state = process_event(query.data, query.from_user.id)
     keyboard = state.get_buttons()
     text = state.get_message()
+    msg = query.message
+
+    actions = [query.answer()]
     if state.inline_buttons:
-        await asyncio.gather(
-            query.message.edit_text(text),
-            query.message.edit_reply_markup(keyboard),
-            query.answer(),
-        )
+        if msg.text != text and text:
+            actions.append(msg.edit_text(text))
+        actions.append(msg.edit_reply_markup(keyboard))
     else:
-        await asyncio.gather(
-            bot.send_message(query.message.chat.id, text, reply_markup=keyboard),
-            query.message.edit_reply_markup(),
-            query.answer(),
-        )
+        actions.append(bot.send_message(msg.chat.id, text, reply_markup=keyboard))
+        actions.append(msg.edit_reply_markup())
+
+    await asyncio.gather(*actions)
 
 
 @dp.message_handler()

@@ -46,14 +46,17 @@ class PageableState(ABC, BaseState):
 
     def reload_items(self) -> None:
         self.items = self.get_items()
+        if len(self.items) == 0:
+            return
+
         self.pageable_items = [
             (i, self.get_headline(f))
             for i, f in enumerate(self.items)
             if len(self.get_headline(f)) < 100
         ]
 
-        if len(self.items):
-            self.item_number = randint(0, len(self.items) - 1)
+        self.item_number = randint(0, len(self.items) - 1)
+        self.message = self.compute_message()
 
     def get_page(self, index: int):
         if self.is_random:
@@ -81,7 +84,7 @@ class PageableState(ABC, BaseState):
 
         return super().next_state()
 
-    def get_message(self) -> str:
+    def compute_message(self) -> str:
         if self.text.isdigit():
             self.item_number = int(self.text) - 1
             if self.item_number < 0 or self.item_number >= len(self.items):

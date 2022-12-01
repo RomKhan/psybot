@@ -19,6 +19,7 @@ class BaseState:
     buttons: list[list[str]] | None
     transitions: dict[str, str]
     inline_buttons: bool
+    one_time_keyboard: bool
 
     def __init__(self, user: User, text: str) -> None:
         self.user = user
@@ -29,6 +30,7 @@ class BaseState:
         self.buttons = data["buttons"]
         self.transitions = data["transitions"]
         self.inline_buttons = data.get("inline_buttons", False)
+        self.one_time_keyboard = data.get("one_time_keyboard", True)
 
     def get_message(self) -> str:
         return self.message
@@ -47,7 +49,7 @@ class BaseState:
             return ReplyKeyboardMarkup(
                 keyboard=[[KeyboardButton(text=e) for e in list] for list in self.buttons],
                 resize_keyboard=True,
-                one_time_keyboard=True,
+                one_time_keyboard=self.one_time_keyboard,
             )
 
     def next_state(self) -> str | None:
@@ -68,5 +70,10 @@ class BaseState:
             button_text=self.text,
         )
 
-    def set_substate(self, *args: str):
-        print(f"WARNING: state {self.name} is not supposed to have extra args")
+    def set_substate(self, *args: str) -> None:
+        print(
+            f"\x1b[31mWARNING\x1b[0m: state {self.name} is not supposed to have extra args: {args}"
+        )
+
+    def action(self, action: str, pram: int) -> None:
+        print(f"\x1b[31mWARNING\x1b[0m: unsupported {action}:{pram} for state {self.name}")

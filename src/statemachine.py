@@ -1,5 +1,6 @@
+import re
 from datetime import datetime
-from typing import TypeGuard
+from typing import Optional, TypeGuard
 
 from aiogram.types import Message
 
@@ -9,8 +10,8 @@ from .states import BaseState, states_by_name
 from .util import oops_message
 
 
-def get_user(id: int, date: datetime) -> User:
-    timestamp = round(date.timestamp())
+def get_user(id: int, date: Optional[datetime] = None) -> User:
+    timestamp = round((date or datetime.now()).timestamp())
     user: User | None = session.query(User).get(id)
     if user is not None:
         user.message_unix_time = timestamp
@@ -39,7 +40,7 @@ def deserialize_state(name: str, user: User, text: str):
     return res
 
 
-def next_state(text: str, from_id: int, date: datetime):
+def next_state(text: str, from_id: int, date: Optional[datetime] = None):
     user = get_user(from_id, date)
     state = deserialize_state(user.state_name, user, text)
     name = state.next_state()
@@ -59,3 +60,15 @@ def next_state(text: str, from_id: int, date: datetime):
 
 def next_state_msg(message: Message) -> BaseState:
     return next_state(message.text, message.from_id, message.date)
+
+
+def process_event(request: str, from_id: int) -> BaseState:
+    m = re.match(r"^([a-z]+)/([a-z]+):([0-9]+)$", request, flags=re.IGNORECASE)
+    if m:
+        name, action, num = m.groups()
+        state = deserialize_state(name, get_user(from_id), request)
+        state.action(action, int(num))
+        session.add(state.log(f"/{action}"))
+        return state
+    else:
+        return next_state(request, from_id)

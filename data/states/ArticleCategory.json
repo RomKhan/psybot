@@ -10,9 +10,10 @@
     ]
   ],
   "message": "Вот список статей в категории «{{CATEGORY}}»",
+  "one_time_keyboard": false,
   "transitions": {
     "/start": "Start",
-    "Назад": "Articles",
+    "Назад": "Start",
     "Предыдущая страница": "THIS",
     "Следующая страница": "THIS",
     "Случайная статья": "THIS"
