@@ -3,11 +3,12 @@
 import json
 from datetime import date
 from glob import glob
+from os.path import basename
 from urllib.parse import urljoin
 
 from quizlib.database import engine, session
 from quizlib.environment import ARTICLES_SITE, DATA_DIR, ECHO_SQL, QUIZ_DIR, WORDS_PER_MINUTE
-from quizlib.models import Article, Quiz
+from quizlib.models import Article, Fact, Quiz, Recommendation
 
 engine.echo = ECHO_SQL
 
@@ -55,5 +56,30 @@ for file in glob(f"{QUIZ_DIR}/*/*.json"):
                 quizzes_dict[key].__setattr__(k, obj[k])
         else:
             session.add(Quiz(**obj))
+
+session.commit()
+
+session.query(Fact).delete()  # todo
+with open(f"{DATA_DIR}/facts.json") as f:
+    facts = json.load(f)
+    for author in facts:
+        for fact in facts[author]:
+            session.add(Fact(author=author, content=fact))
+
+session.commit()
+
+recommendations: list[Recommendation] = session.query(Recommendation).all()
+recommendations_dict = {(a.category, a.title): a for a in recommendations}
+for file in glob(f"{DATA_DIR}/recommendations/*.json"):
+    with open(file) as f:
+        obj = json.load(f)
+        for title in obj:
+            category = basename(file)
+
+            key = (category, title)
+            if key in recommendations_dict:
+                recommendations_dict[key].content = obj[title]
+            else:
+                session.add(Recommendation(category=category, title=title, content=obj[title]))
 
 session.commit()
