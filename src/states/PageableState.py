@@ -34,8 +34,6 @@ class PageableState(ABC, BaseState):
 
     def __init__(self, user: User, text: str) -> None:
         super().__init__(user, text)
-        self.reload_items()
-
         self.page_number = user.page_number or 0
 
         match self.text:
@@ -43,6 +41,8 @@ class PageableState(ABC, BaseState):
                 user.page_number = self.page_number - 1
             case "Следующая страница":
                 user.page_number = self.page_number + 1
+
+        self.reload_items()
 
     def reload_items(self) -> None:
         self.items = self.get_items()
