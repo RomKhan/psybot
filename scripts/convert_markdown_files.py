@@ -7,11 +7,11 @@ import re
 import frontmatter
 
 REPO_URL = "git@github.com:psychological-essence/psychological_essence_articles.git"
-REPO_DIR = "psychological_essence_articles"
+REPO_DIR = "articles"
 CONTENT_DIR = f"../{REPO_DIR}/content/articles/"
 
 if not os.path.exists(f"../{REPO_DIR}/"):
-    os.system(f"cd .. && git clone {REPO_URL}")
+    os.system(f"cd .. && git clone {REPO_URL} {REPO_DIR}")
 
 for file in os.listdir(CONTENT_DIR):
     if file[0] == "_":
