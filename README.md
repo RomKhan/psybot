@@ -12,7 +12,7 @@ $ ./run.sh
 ## Building (and running) docker container
 
 ```console
-$ docker build -t psy-essence-bot .
+$ ./scripts/build_docker.sh
 $ docker run --env-file .env psy-essence-bot
 ```
 

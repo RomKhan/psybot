@@ -44,6 +44,10 @@ for file in glob(f"{QUIZ_DIR}/*/*.json"):
         obj.pop("scales", None)
         obj["description"] = obj.pop("desc")
 
+        for k in list(obj):
+            if "_" in k:
+                obj.pop(k)
+
         if "question" in obj:
             obj["questions"] = [obj.pop("question")]
 
