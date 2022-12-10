@@ -1,12 +1,10 @@
 from functools import lru_cache
 from typing import Collection
 
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-
 from ..database import session
-from ..models import Article, User
-from ..util import ReplyMarkupType, flatten
-from .BaseState import BaseState
+from ..models import Article, Technique, User
+from ..util import ReplyMarkupType
+from .LikeableState import LikeableState
 from .PageableState import PageableState
 
 
@@ -35,30 +33,16 @@ def get_article(id: int) -> Article:
     return session.query(Article).get(id)
 
 
-def get_keyboard_for_article(article: Article) -> InlineKeyboardMarkup:
-    id = article.id
-    likes = article.likes
-    dislikes = -likes if likes < 0 else ""
-    likes = likes if likes > 0 else ""
-    return InlineKeyboardMarkup(
-        inline_keyboard=[
-            [
-                InlineKeyboardButton(text=f"👍 {likes}", callback_data=f"Articles/like:{id}"),
-                InlineKeyboardButton(text=f"👎 {dislikes}", callback_data=f"Articles/dislike:{id}"),
-            ]
-        ],
-    )
-
-
 class ArticleCategoryState(PageableState):
     category: str
     name = "ArticleCategory"
     random_button = "Случайная статья"
     start_button = ""
     is_random = False
+    item_name = "Статья"
 
     items: list[tuple[int, str]]
-    selected_article: Article | None
+    selected_article: Article | Technique | None
 
     def get_items(self) -> list[tuple[int, str]]:
         return articles_by_cat(self.category, self.user.is_subscribed())
@@ -66,12 +50,15 @@ class ArticleCategoryState(PageableState):
     def get_headline(self, article: tuple[int, str]) -> str:
         return article[1]
 
+    def get_article(self) -> Article | Technique:
+        return get_article(self.items[self.item_number][0])
+
     def print_item(self) -> str:
-        article = get_article(self.items[self.item_number][0])
+        article = self.get_article()
         self.mark_as_read(article)
         text = " ".join(article.content.split()[:50])
         res = [
-            f"Статья №{self.item_number+1} в категории «{self.category}»",
+            f"{self.item_name} №{self.item_number+1} в категории «{self.category}»",
             article.title,
             text,
             f"Чиатать полную весрию: {article.article_url}",
@@ -94,44 +81,20 @@ class ArticleCategoryState(PageableState):
 
     def get_buttons(self) -> ReplyMarkupType:
         if self.selected_article:
-            return get_keyboard_for_article(self.selected_article)
+            return ArticleState.likes_keyboard(self.selected_article)
         return super().get_buttons()
 
-    def mark_as_read(self, article: Article) -> None:
+    def mark_as_read(self, article: Article | Technique) -> None:
         article.view(self.user.id)
         self.selected_article = article
 
 
-class ArticleState(BaseState):
+class ArticleState(LikeableState):
     name = "Articles"
+    substate = ArticleCategoryState
 
-    selected_article: Article | None
+    def list_categories(self) -> Collection[str]:
+        return list_categories()
 
-    def __init__(self, user: User, text: str) -> None:
-        self.selected_article = None
-        super().__init__(user, text)
-
-        assert self.buttons
-        self.buttons = [[e] for e in list_categories()] + [[flatten(self.buttons)[-1]]]
-
-        self.transitions = self.transitions.copy()
-        for e in list_categories():
-            self.transitions[e] = f"{ArticleCategoryState.name}/{e}"
-
-    def action(self, action: str, pram: int) -> None:
-        if action == "like":
-            delta = 1
-        elif action == "dislike":
-            delta = -1
-        else:
-            return super().action(action, pram)
-
-        article = get_article(pram)
-        article.like(delta, self.user.id)
-        self.message = ""
-        self.selected_article = article
-
-    def get_buttons(self) -> ReplyMarkupType:
-        if self.selected_article:
-            return get_keyboard_for_article(self.selected_article)
-        return super().get_buttons()
+    def get_item(self, id: int) -> Article:
+        return get_article(id)
