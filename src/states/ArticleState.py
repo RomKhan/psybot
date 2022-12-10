@@ -80,6 +80,7 @@ class ArticleCategoryState(PageableState):
         return super().get_message().replace("{{CATEGORY}}", self.category)
 
     def get_buttons(self) -> ReplyMarkupType:
+        # todo: use both keyboards
         if self.selected_article:
             return ArticleState.likes_keyboard(self.selected_article)
         return super().get_buttons()
