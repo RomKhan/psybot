@@ -20,7 +20,7 @@ def list_categories() -> Collection[str]:
 
 
 @lru_cache
-def articles_by_cat(category: str, subscription: bool = False) -> list[tuple[int, str]]:
+def techniques_by_cat(category: str, subscription: bool = False) -> list[tuple[int, str]]:
     return [
         (id, title)
         for id, cat, title, sub in list_techniques()
@@ -36,14 +36,12 @@ def get_technique(id: int) -> Technique:
 class TechniqueCategoryState(ArticleCategoryState):
     name = "TechniqueCategory"
     random_button = "Случайная техника"
-    start_button = ""
-    is_random = False
     item_name = "Техника"
 
     selected_article: Technique | None
 
     def get_items(self) -> list[tuple[int, str]]:
-        return articles_by_cat(self.category, self.user.is_subscribed())
+        return techniques_by_cat(self.category, self.user.is_subscribed())
 
     def get_article(self) -> Technique:
         return get_technique(self.items[self.item_number][0])

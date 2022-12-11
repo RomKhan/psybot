@@ -35,14 +35,23 @@ class PageableState(ABC, BaseState):
     def __init__(self, user: User, text: str) -> None:
         super().__init__(user, text)
         self.page_number = user.page_number or 0
+        self.reload_items()
 
+    def commit(self) -> None:
+        self.update_page_number()
+        self.message = self.compute_message()
+        return super().commit()
+
+    def update_page_number(self) -> None:
         match self.text:
             case "Предыдущая страница":
-                user.page_number = self.page_number - 1
+                self.page_number -= 1
             case "Следующая страница":
-                user.page_number = self.page_number + 1
+                self.page_number += 1
+            case self.start_button:
+                self.page_number = 0
 
-        self.reload_items()
+        self.user.page_number = self.page_number
 
     def reload_items(self) -> None:
         self.items = self.get_items()
@@ -56,7 +65,6 @@ class PageableState(ABC, BaseState):
         ]
 
         self.item_number = randint(0, len(self.items) - 1)
-        self.message = self.compute_message()
 
     def get_page(self, index: int):
         if self.is_random:

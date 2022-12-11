@@ -60,6 +60,7 @@ class BaseState:
 
     def log(self, next_name: str | None = None) -> ActionLog:
         if next_name is None:
+            self.commit()
             next_name = self.name
 
         return ActionLog(
@@ -69,6 +70,9 @@ class BaseState:
             new_state_name=next_name,
             button_text=self.text,
         )
+
+    def commit(self) -> None:
+        pass
 
     def set_substate(self, *args: str) -> None:
         print(
