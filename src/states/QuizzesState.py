@@ -1,6 +1,8 @@
 from functools import lru_cache
 from typing import Collection
 
+from quizlib.util import humanize_category_name
+
 from ..database import session
 from ..models import Quiz
 from ..util import ReplyMarkupType
@@ -16,7 +18,7 @@ def list_quizzes() -> list[tuple[int, str, str, bool]]:
 
 @lru_cache
 def list_categories() -> Collection[str]:
-    return set(e[1] for e in list_quizzes())
+    return set(humanize_category_name(e[1]) for e in list_quizzes())
 
 
 @lru_cache
@@ -24,7 +26,7 @@ def quizzes_by_cat(category: str, subscription: bool = False) -> list[tuple[int,
     return [
         (id, title)
         for id, cat, title, sub in list_quizzes()
-        if cat == category and (subscription or not sub)
+        if humanize_category_name(cat) == category and (subscription or not sub)
     ]
 
 
