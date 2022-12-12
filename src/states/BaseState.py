@@ -16,7 +16,7 @@ class BaseState:
     user: User
 
     message: str
-    buttons: list[list[str]] | None
+    buttons: list[list[str]]
     transitions: dict[str, str]
     inline_buttons: bool
     one_time_keyboard: bool
@@ -27,7 +27,7 @@ class BaseState:
 
         data = load_data_file("states", self.name)
         self.message = data["message"]
-        self.buttons = data["buttons"]
+        self.buttons = data["buttons"] or []
         self.transitions = data["transitions"]
         self.inline_buttons = data.get("inline_buttons", False)
         self.one_time_keyboard = data.get("one_time_keyboard", True)
@@ -36,7 +36,7 @@ class BaseState:
         return self.message
 
     def get_buttons(self) -> ReplyMarkupType:
-        if self.buttons is None:
+        if not self.buttons:
             return ReplyKeyboardRemove()
         elif self.inline_buttons:
             return InlineKeyboardMarkup(
@@ -80,4 +80,4 @@ class BaseState:
         )
 
     def action(self, action: str, pram: int) -> None:
-        print(f"\x1b[31mWARNING\x1b[0m: unsupported {action}:{pram} for state {self.name}")
+        print(f"\x1b[31mWARNING\x1b[0m: unsupported action {action}:{pram} for state {self.name}")

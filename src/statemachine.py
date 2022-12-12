@@ -63,12 +63,13 @@ def next_state_msg(message: Message) -> BaseState:
 
 
 def process_event(request: str, from_id: int) -> BaseState:
-    m = re.match(r"^([a-z]+(?:/[a-z0-9]+)?)/([a-z]+):([0-9]+)$", request, flags=re.IGNORECASE)
+    m = re.match(r"^([a-z]+(?:/[a-z0-9]+)*)/([a-z]+):([0-9]+)$", request, flags=re.IGNORECASE)
     if m:
         name, action, num = m.groups()
         state = deserialize_state(name, get_user(from_id), request)
         state.action(action, int(num))
         session.add(state.log(f"/{action}"))
+        session.commit()
         return state
     else:
         return next_state(request, from_id)

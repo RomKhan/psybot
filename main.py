@@ -20,14 +20,16 @@ dp = Dispatcher(bot)
 async def handle_inline_keyboard(query: types.CallbackQuery):
     state = process_event(query.data, query.from_user.id)
     keyboard = state.get_buttons()
+    print("\x1b[32mDEBUG\x1b[0m", keyboard)
     text = state.get_message()
     msg = query.message
 
     actions = [query.answer()]
-    if state.inline_buttons:
+    if isinstance(keyboard, types.InlineKeyboardMarkup):
         if msg.text != text and text:
-            actions.append(msg.edit_text(text))
-        actions.append(msg.edit_reply_markup(keyboard))
+            actions.append(msg.edit_text(text, reply_markup=keyboard))
+        else:
+            actions.append(msg.edit_reply_markup(keyboard))
     else:
         actions.append(bot.send_message(msg.chat.id, text, reply_markup=keyboard))
         actions.append(msg.edit_reply_markup())
@@ -38,6 +40,7 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
 @dp.message_handler()
 async def handle_message(message: types.Message):
     state = next_state_msg(message)
+    print("\x1b[32mDEBUG\x1b[0m", state.get_buttons())
     await message.answer(
         state.get_message(), reply_markup=state.get_buttons(), disable_web_page_preview=True
     )

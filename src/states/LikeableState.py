@@ -25,7 +25,6 @@ class LikeableState(ABC, BaseState):
         self.selected_item = None
         super().__init__(user, text)
 
-        assert self.buttons
         categories = self.list_categories()
         self.buttons = [[e] for e in categories] + [[flatten(self.buttons)[-1]]]
 
