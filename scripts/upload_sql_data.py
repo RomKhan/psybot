@@ -74,7 +74,13 @@ with open(f"{DATA_DIR}/facts.json") as f:
     facts = json.load(f)
     for author in facts:
         for fact in facts[author]:
-            session.add(Fact(author=author, content=fact))
+            title = fact
+            for sep in ["\n", ". ", " - ", " – ", " — "]:
+                title = title.split(sep)[0]
+            if len(title) > 100:
+                title = None
+
+            session.add(Fact(author=author, content=fact, title=title))
 
 session.commit()
 
