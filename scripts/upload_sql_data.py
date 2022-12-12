@@ -3,7 +3,7 @@
 import json
 from datetime import date
 from glob import glob
-from os.path import basename
+from os.path import basename, splitext
 from urllib.parse import urljoin
 
 from quizlib.database import engine, session
@@ -90,11 +90,15 @@ for file in glob(f"{DATA_DIR}/recommendations/*.json"):
     with open(file) as f:
         obj = json.load(f)
         for title in obj:
-            category = basename(file)
+            category = splitext(basename(file))[0]
 
             key = (category, title)
+            key_json = (category + ".json", title)
             if key in recommendations_dict:
                 recommendations_dict[key].content = obj[title]
+            elif key_json in recommendations_dict:
+                recommendations_dict[key_json].content = obj[title]
+                recommendations_dict[key_json].category = category  # type: ignore
             else:
                 session.add(Recommendation(category=category, title=title, content=obj[title]))
 
