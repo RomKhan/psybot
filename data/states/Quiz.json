@@ -1,0 +1,19 @@
+{
+  "buttons": [
+    [
+      "PLACEHOLDER"
+    ],
+    [
+      "Предыдущий вопрос",
+      "Назад",
+      "Завершить тест"
+    ]
+  ],
+  "inline_buttons": true,
+  "message": "Вопрос №{{INDEX}} теста «{{NAME}}»",
+  "transitions": {
+    "/start": "Start",
+    "PLACEHOLDER": "NotImplemented",
+    "Назад": "THIS"
+  }
+}

@@ -5,6 +5,7 @@ from .FactState import FactState
 from .FilmRecommendationState import FilmRecommendationState
 from .LikeableState import LikeableState
 from .PageableState import PageableState
+from .QuizState import QuizState
 from .QuizzesState import QuizCategoryState, QuizzesState
 from .SeriesRecommendationState import SeriesRecommendationState
 from .TechniqueState import TechniqueCategoryState, TechniqueState
@@ -24,6 +25,7 @@ __all__ = [
     "TechniqueState",
     "QuizCategoryState",
     "QuizzesState",
+    "QuizState",
 ]
 
 
@@ -45,4 +47,5 @@ states_by_name: dict[str, type[BaseState]] = {
     "TechniqueCategory": TechniqueCategoryState,
     "Quizzes": QuizzesState,
     "QuizCategory": QuizCategoryState,
+    "Quiz": QuizState,
 }
