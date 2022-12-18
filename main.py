@@ -6,7 +6,7 @@ import logging
 from aiogram import Bot, Dispatcher, executor, types
 
 from src.environment import API_TOKEN
-from src.statemachine import next_state_msg, process_event
+from src.statemachine import next_state_msg, process_event, session
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -14,6 +14,11 @@ logging.basicConfig(level=logging.INFO)
 # Initialize bot and dispatcher
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
+
+
+@dp.errors_handler()
+async def rollback_transaction():
+    session.rollback()
 
 
 @dp.callback_query_handler()
