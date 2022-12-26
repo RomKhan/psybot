@@ -30,7 +30,7 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
     msg = query.message
 
     actions = [query.answer()]
-    if isinstance(keyboard, types.InlineKeyboardMarkup):
+    if isinstance(keyboard, types.InlineKeyboardMarkup) or keyboard is None:
         if msg.text != text and text:
             actions.append(msg.edit_text(text, reply_markup=keyboard))
         else:

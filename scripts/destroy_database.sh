@@ -13,6 +13,7 @@ echo "DROP TABLE telegram_users;" | psql "$DATABASE_URI"
 echo "DROP TABLE android_users;" | psql "$DATABASE_URI"
 echo "DROP TABLE quiz_results;" | psql "$DATABASE_URI"
 echo "DROP TABLE action_log;" | psql "$DATABASE_URI"
+echo "DROP TABLE quiz_answers;" | psql "$DATABASE_URI"
 
 echo "DROP TABLE data_articles;" | psql "$DATABASE_URI"
 echo "DROP TABLE data_quizzes;" | psql "$DATABASE_URI"
