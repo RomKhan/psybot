@@ -1,3 +1,4 @@
+from .AppDownloadState import AppDownloadState
 from .ArticleState import ArticleCategoryState, ArticleState
 from .BaseState import BaseState
 from .BookRecommendationState import BookRecommendationState
@@ -26,6 +27,7 @@ __all__ = [
     "QuizCategoryState",
     "QuizzesState",
     "QuizState",
+    "AppDownloadState",
 ]
 
 
@@ -48,4 +50,5 @@ states_by_name: dict[str, type[BaseState]] = {
     "Quizzes": QuizzesState,
     "QuizCategory": QuizCategoryState,
     "Quiz": QuizState,
+    "AppDownload": AppDownloadState,
 }

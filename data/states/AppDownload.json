@@ -1,0 +1,16 @@
+{
+  "buttons": [
+    [
+      "https://psychological-essence.github.io/PsychologicalEssence.apk"
+    ],
+    [
+      "Назад"
+    ]
+  ],
+  "inline_buttons": true,
+  "message": "У нас есть андроид приложение, но его пока нет в Google Play. Поэтому его можно скачать только по ссылке. Там надо будет разрешить установку из сторонних источников, но это не сложно. Я в тебя верю)",
+  "transitions": {
+    "/start": "Start",
+    "Назад": "Start"
+  }
+}
