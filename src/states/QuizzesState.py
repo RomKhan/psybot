@@ -15,7 +15,7 @@ from .QuizState import QuizState
 @lru_cache
 def list_quizzes() -> list[tuple[int, str, str, bool]]:
     columns = [Quiz.id, Quiz.category, Quiz.name, Quiz.needs_subscription]
-    return session.query(*columns).distinct().all()
+    return session.query(*columns).where(Quiz.answers != None).distinct().all()  # noqa: E711
 
 
 @lru_cache

@@ -54,7 +54,7 @@ class PageableState(ABC, BaseState):
         self.user.page_number = self.page_number
 
     def reload_items(self) -> None:
-        self.items = self.get_items()
+        self.items = sorted(self.get_items())
         if len(self.items) == 0:
             return
 
