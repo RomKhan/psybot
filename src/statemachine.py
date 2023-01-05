@@ -47,6 +47,7 @@ def next_state(text: str, from_id: int, date: Optional[datetime] = None):
 
     if is_valid_state(name):
         next_state = deserialize_state(name, user, text)
+        next_state.inactive_buttons = state.inactive_buttons
         session.add(next_state.log())
     else:
         next_state = state

@@ -74,6 +74,9 @@ class BaseState:
     def commit(self) -> None:
         pass
 
+    def inactive_buttons(self) -> InlineKeyboardMarkup | None:
+        return None
+
     def set_substate(self, *args: str) -> None:
         print(
             f"\x1b[31mWARNING\x1b[0m: state {self.name} is not supposed to have extra args: {args}"
