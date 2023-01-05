@@ -1,4 +1,4 @@
-from ..util import load_data_file
+from ..util import recommendations_by_category
 from .PageableState import PageableState
 
 
@@ -10,7 +10,7 @@ class BookRecommendationState(PageableState):
     items: list[tuple[str, str]]
 
     def get_items(self) -> list[tuple[str, str]]:
-        return list(load_data_file("recommendations", "Books").items())
+        return recommendations_by_category("Books")
 
     def get_headline(self, book: tuple[str, str]) -> str:
         return book[0]

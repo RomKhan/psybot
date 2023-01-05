@@ -4,6 +4,7 @@ import json
 from datetime import date
 from glob import glob
 from os.path import basename, splitext
+from typing import Any
 from urllib.parse import urljoin
 
 from quizlib.database import engine, session
@@ -11,6 +12,11 @@ from quizlib.environment import ARTICLES_SITE, DATA_DIR, ECHO_SQL, QUIZ_DIR, WOR
 from quizlib.models import Article, Fact, Quiz, Recommendation, Technique
 
 engine.echo = ECHO_SQL
+
+
+def object_assign(target: object, source: dict[str, Any]):
+    for key in source:
+        target.__setattr__(key, source[key])
 
 
 def add_articles(Type: type[Article] | type[Technique], name: str):
@@ -30,8 +36,7 @@ def add_articles(Type: type[Article] | type[Technique], name: str):
 
             key = (obj["category"], obj["title"])
             if key in articles_dict:
-                for k in obj:
-                    articles_dict[key].__setattr__(k, obj[k])
+                object_assign(articles_dict[key], obj)
             else:
                 session.add(Type(**obj))
 
@@ -62,8 +67,7 @@ for file in glob(f"{QUIZ_DIR}/*/*.json"):
 
         key = (obj["category"], obj["filename"])
         if key in quizzes_dict:
-            for k in obj:
-                quizzes_dict[key].__setattr__(k, obj[k])
+            object_assign(quizzes_dict[key], obj)
         else:
             session.add(Quiz(**obj))
 
@@ -88,18 +92,23 @@ recommendations: list[Recommendation] = session.query(Recommendation).all()
 recommendations_dict = {(a.category, a.title): a for a in recommendations}
 for file in glob(f"{DATA_DIR}/recommendations/*.json"):
     with open(file) as f:
-        obj = json.load(f)
-        for title in obj:
+        arr = json.load(f)
+        for item in arr:
+            title = item["title"]
             category = splitext(basename(file))[0]
+            item["category"] = category
+
+            item["image_urls"] = [urljoin(ARTICLES_SITE, e) for e in item["image_urls"]]
+            if not item["image_urls"]:
+                del item["image_urls"]
 
             key = (category, title)
             key_json = (category + ".json", title)
             if key in recommendations_dict:
-                recommendations_dict[key].content = obj[title]
+                object_assign(recommendations_dict[key], item)
             elif key_json in recommendations_dict:
-                recommendations_dict[key_json].content = obj[title]
-                recommendations_dict[key_json].category = category  # type: ignore
+                object_assign(recommendations_dict[key_json], item)
             else:
-                session.add(Recommendation(category=category, title=title, content=obj[title]))
+                session.add(Recommendation(**item))
 
 session.commit()
