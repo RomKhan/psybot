@@ -1,0 +1,12 @@
+[Unit]
+Description=Psychological Essence Bot
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker run --env-file /root/.env psy-essence-bot
+ExecStop=/usr/bin/docker stop psy-essence-bot
+
+[Install]
+WantedBy=multi-user.target
