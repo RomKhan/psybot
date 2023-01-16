@@ -5,8 +5,8 @@ After=docker.service
 
 [Service]
 Restart=always
-ExecStart=/usr/bin/docker run --env-file /root/.env psy-essence-bot
-ExecStop=/usr/bin/docker stop psy-essence-bot
+ExecStart=/usr/bin/docker run --rm --name psybot-1 --env-file /root/.env psy-essence-bot
+ExecStop=/usr/bin/docker stop psybot-1
 
 [Install]
 WantedBy=multi-user.target
