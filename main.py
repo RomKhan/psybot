@@ -18,6 +18,7 @@ dp = Dispatcher(bot)
 
 @dp.errors_handler()
 async def rollback_transaction(update, error):
+    # todo: retry
     session.rollback()
 
 
