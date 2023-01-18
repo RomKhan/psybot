@@ -21,6 +21,7 @@ class QuizState(BaseState):
     question_index: int
     num_questions: int
     ans: QuizAnswer | None
+    inline_answers: bool
 
     def set_substate(self, *args: str) -> None:
         assert len(args) == 2
@@ -29,6 +30,7 @@ class QuizState(BaseState):
         self.num_questions = max(len(self.quiz.questions), len(self.quiz.answers))  # type: ignore
         self.name = f"{self.name}/{self.quiz.id}/{self.question_index}"
         self.ans = self.get_quizans()
+        self.inline_answers = any(len(ans) > 21 for ans in self.get_answers())
 
     def get_quizans(self, delta: int = 0) -> QuizAnswer | None:
         return session.query(QuizAnswer).filter_by(**self.get_quizans_id(delta)).one_or_none()
@@ -48,6 +50,11 @@ class QuizState(BaseState):
         res = res.replace("{{NAME}}", str(self.quiz.name))
         res += f"\n\n{self.get_question()}"
 
+        if self.inline_answers:
+            res += "\n\nВарианты ответов:"
+            for i, ans in enumerate(self.get_answers()):
+                res += f"\n{i+1}. {ans}"
+
         if self.ans:
             res += f"\n\nРанее сохранённый ответ «{self.ans.ans_string()}»"
         return res
@@ -61,7 +68,8 @@ class QuizState(BaseState):
         return arr[self.question_index % len(arr)]
 
     def get_buttons(self) -> ReplyMarkupType:
-        res = InlineKeyboardMarkup(row_width=2)
+        row_width = 7 if self.inline_answers else 2
+        res = InlineKeyboardMarkup(row_width=row_width)
         name = f"{self.__class__.name}/{self.quiz.id}"
 
         if self.question_index == self.num_questions:
@@ -72,7 +80,8 @@ class QuizState(BaseState):
         else:
             for i, ans in enumerate(self.get_answers()):
                 action = f"{name}/{self.question_index+1}/answer:{i}"
-                res.insert(InlineKeyboardButton(text=ans, callback_data=action))
+                text = str(i + 1) if self.inline_answers else ans
+                res.insert(InlineKeyboardButton(text=text, callback_data=action))
 
         if self.question_index:
             action = f"{name}/{self.question_index-1}/goto:0"
