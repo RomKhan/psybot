@@ -14,6 +14,25 @@ if not os.path.exists(f"../{REPO_DIR}/"):
     os.system(f"cd .. && git clone {REPO_URL} {REPO_DIR}")
 
 
+def get_short_description(content: str, title: str) -> str | None:
+    m = re.match(r"^#([^\n]+)\n", content.strip())
+    if m:
+        desc = m.group(1).replace(title.strip(), "").strip()
+        desc = re.sub(r" +", " ", desc)
+        desc = re.sub(r"^[^а-яёa-z]+", "", desc, flags=re.IGNORECASE)
+        if desc:
+            return desc
+
+    content = re.sub(r"^#[^\n]+\n", "", content.strip()).strip()
+    m = re.match(r"^[^.]+\. ", content)
+    if m:
+        desc = m.group(0).strip()
+        desc = re.sub(r"[\n ]+", " ", desc)
+        return desc
+
+    return None
+
+
 def transfer_dir(category: str):
     content_dir = f"{CONTENT_DIR}/{category}"
 
@@ -28,6 +47,9 @@ def transfer_dir(category: str):
         obj["content"] = re.sub(r"^#[^\n]+\n", "", article.content.strip()).strip()
         url_name = re.sub(r"[^а-яёa-z]+", "-", file.replace(".md", "").lower())
         obj["url"] = f"/{category}/{url_name}/"
+
+        if category == "techniques":
+            obj["short_description"] = get_short_description(article.content, obj["title"])
 
         dirname = f"data/{category}/{obj['category']}/"
         os.makedirs(dirname, exist_ok=True)
