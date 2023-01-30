@@ -20,7 +20,7 @@ def list_quizzes() -> list[tuple[int, str, str, bool]]:
 
 @lru_cache
 def list_categories() -> Collection[str]:
-    return set(e[1] for e in list_quizzes())
+    return set(e[1] for e in list_quizzes() if e[1] != "InternalCourses")
 
 
 @lru_cache

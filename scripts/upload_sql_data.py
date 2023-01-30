@@ -9,7 +9,7 @@ from urllib.parse import urljoin
 
 from quizlib.database import engine, session
 from quizlib.environment import ARTICLES_SITE, DATA_DIR, ECHO_SQL, QUIZ_DIR, WORDS_PER_MINUTE
-from quizlib.models import Article, Fact, Quiz, Recommendation, Technique
+from quizlib.models import Article, Course, Fact, Lesson, Quiz, Recommendation, Technique
 
 engine.echo = ECHO_SQL
 
@@ -110,5 +110,51 @@ for file in glob(f"{DATA_DIR}/recommendations/*.json"):
                 object_assign(recommendations_dict[key_json], item)
             else:
                 session.add(Recommendation(**item))
+
+session.commit()
+
+courses: list[Course] = session.query(Course).all()
+courses_dict = {a.filename: a for a in courses}
+for file in glob(f"{DATA_DIR}/courses/*.json"):
+    with open(file) as f:
+        item = json.load(f)
+        item["filename"] = splitext(basename(file))[0]
+
+        if item.get("image_url"):
+            item["image_url"] = urljoin(ARTICLES_SITE, item["image_url"])
+
+        lessons = []
+        for lesson in item["lessons"]:
+            quiz_key = ("InternalCourses", lesson["quiz_name"])
+            quiz = quizzes_dict.get(quiz_key)  # type: ignore
+
+            if quiz is None:
+                # todo: acctually implement all the quizzes
+                quiz = quizzes_dict[("InternalCourses", "КурсМанипуляции_Урок1")]  # type: ignore
+
+            lesson["quiz"] = quiz
+            del lesson["quiz_name"]
+            lessons.append(lesson)
+
+        key = item["filename"]
+        if key in courses_dict:
+            arr = courses_dict[key].lessons
+            if len(arr) > len(lessons):
+                slice_start = len(lessons)
+                for lsn in arr[slice_start:]:
+                    session.delete(lsn)
+                del arr[slice_start:]
+
+            for i, lesson in enumerate(lessons):
+                if i >= len(arr):
+                    arr.append(Lesson(**lesson))
+                else:
+                    object_assign(arr[i], lesson)
+
+            del item["lessons"]
+            object_assign(courses_dict[key], item)
+        else:
+            item["lessons"] = [Lesson(**lesson) for lesson in lessons]
+            session.add(Course(**item))
 
 session.commit()
