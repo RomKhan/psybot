@@ -62,6 +62,9 @@ for file in glob(f"{QUIZ_DIR}/*/*.json"):
         if "question" in obj:
             obj["questions"] = [obj.pop("question")]
 
+        if obj.get("image_url"):
+            obj["image_url"] = urljoin(ARTICLES_SITE, obj["image_url"])
+
         if "answers" in obj and isinstance(obj["answers"], dict):
             obj["answers"] = [list(obj["answers"].values())]
 
@@ -113,6 +116,8 @@ for file in glob(f"{DATA_DIR}/recommendations/*.json"):
 
 session.commit()
 
+quizzes = session.query(Quiz).all()
+quizzes_dict = {(a.category, a.filename): a for a in quizzes}
 courses: list[Course] = session.query(Course).all()
 courses_dict = {a.filename: a for a in courses}
 for file in glob(f"{DATA_DIR}/courses/*.json"):
