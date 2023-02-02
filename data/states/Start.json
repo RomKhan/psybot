@@ -17,7 +17,7 @@
   "message": "Привет! Это предварительное сообщения для главного меню бота Psychological Essence. Ты можешь нажимать на кнопочки, чтобы попасть в другие отделы бота.",
   "transitions": {
     "/start": "Start",
-    "Подписка": "NotImplemented",
+    "Подписка": "Subscribe",
     "Приложение": "AppDownload",
     "Рекомендации": "Recommendations",
     "Статьи": "Articles",

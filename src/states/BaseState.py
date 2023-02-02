@@ -1,3 +1,5 @@
+from typing import Any
+
 from aiogram.types import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
@@ -21,6 +23,8 @@ class BaseState:
     inline_buttons: bool
     one_time_keyboard: bool
 
+    data: dict[str, Any]
+
     def __init__(self, user: User, text: str) -> None:
         self.user = user
         self.text = text.strip()
@@ -31,6 +35,7 @@ class BaseState:
         self.transitions = data["transitions"]
         self.inline_buttons = data.get("inline_buttons", False)
         self.one_time_keyboard = data.get("one_time_keyboard", True)
+        self.data = data
 
     def get_message(self) -> str:
         return self.message

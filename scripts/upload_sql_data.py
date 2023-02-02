@@ -55,24 +55,22 @@ for file in glob(f"{QUIZ_DIR}/*/*.json"):
         obj.pop("scales", None)
         obj["description"] = obj.pop("desc")
 
-        for k in list(obj):
-            if "_" in k:
-                obj.pop(k)
-
         if "question" in obj:
             obj["questions"] = [obj.pop("question")]
-
-        if obj.get("image_url"):
-            obj["image_url"] = urljoin(ARTICLES_SITE, obj["image_url"])
 
         if "answers" in obj and isinstance(obj["answers"], dict):
             obj["answers"] = [list(obj["answers"].values())]
 
-        key = (obj["category"], obj["filename"])
+        item = {k: v for k, v in obj.items() if "_" not in k}
+
+        if obj.get("image_url"):
+            item["image_url"] = urljoin(ARTICLES_SITE, obj["image_url"])
+
+        key = (item["category"], item["filename"])
         if key in quizzes_dict:
-            object_assign(quizzes_dict[key], obj)
+            object_assign(quizzes_dict[key], item)
         else:
-            session.add(Quiz(**obj))
+            session.add(Quiz(**item))
 
 session.commit()
 

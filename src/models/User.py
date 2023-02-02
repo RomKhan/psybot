@@ -10,4 +10,4 @@ class User(TimestampMixin, Base):
     page_number = Column(Integer, nullable=True)
 
     def is_subscribed(self) -> bool:
-        return True  # todo
+        return False  # todo
