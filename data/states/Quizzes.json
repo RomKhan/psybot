@@ -4,7 +4,7 @@
       "PLACEHOLDER"
     ],
     [
-      "Назад"
+      "В начало"
     ]
   ],
   "inline_buttons": true,
@@ -12,6 +12,6 @@
   "transitions": {
     "/start": "Start",
     "PLACEHOLDER": "NotImplemented",
-    "Назад": "Start"
+    "В начало": "Start"
   }
 }

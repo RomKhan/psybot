@@ -6,15 +6,15 @@
       "Сериалы"
     ],
     [
-      "Назад"
+      "В начало"
     ]
   ],
   "inline_buttons": true,
   "message": "Не знаете что еще прочесть или посмотреть по психологии? Выбирайте категорию и мы поможем вам не заскучать в свободный вечер",
   "transitions": {
     "/start": "Start",
+    "В начало": "Start",
     "Книги": "BookRecommendations",
-    "Назад": "Start",
     "Сериалы": "SeriesRecommendations",
     "Фильмы": "FilmRecommendations"
   }
