@@ -22,7 +22,7 @@ class SubscribeState(BaseState):
             self.message = self.data["message2"]
             del self.buttons[0]
         else:
-            self.url = generate_prodamus_link({"order_id": str(user.id)})
+            self.url = generate_prodamus_link(user.id)
             self.button = InlineKeyboardButton(text=self.buttons[0][1], url=self.url)
             del self.buttons[1]
 
