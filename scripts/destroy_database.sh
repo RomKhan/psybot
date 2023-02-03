@@ -15,6 +15,7 @@ echo "DROP TABLE telegram_users CASCADE;" | psql "$DATABASE_URI"
 echo "DROP TABLE android_users;" | psql "$DATABASE_URI"
 echo "DROP TABLE quiz_results;" | psql "$DATABASE_URI"
 echo "DROP TABLE action_log;" | psql "$DATABASE_URI"
+echo "DROP TABLE payment_log;" | psql "$DATABASE_URI"
 echo "DROP TABLE quiz_answers;" | psql "$DATABASE_URI"
 echo "DROP TABLE recorded_likes;" | psql "$DATABASE_URI"
 

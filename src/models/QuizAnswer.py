@@ -3,7 +3,7 @@ from sqlalchemy import Column, ForeignKey, Integer, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from ..database import Base, TimestampMixin
-from .User import User
+from ..models import User
 
 
 class QuizAnswer(TimestampMixin, Base):
