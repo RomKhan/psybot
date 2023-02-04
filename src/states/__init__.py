@@ -5,6 +5,7 @@ from .BookRecommendationState import BookRecommendationState
 from .FactState import FactState
 from .FilmRecommendationState import FilmRecommendationState
 from .LikeableState import LikeableState
+from .LoginState import LoginState
 from .PageableState import PageableState
 from .QuizState import QuizState
 from .QuizzesState import QuizCategoryState, QuizzesState
@@ -30,6 +31,7 @@ __all__ = [
     "QuizState",
     "AppDownloadState",
     "SubscribeState",
+    "LoginState",
 ]
 
 
@@ -41,6 +43,8 @@ states_by_name: dict[str, type[BaseState]] = {
     "Start": make_state("Start"),
     "NotImplemented": make_state("NotImplemented"),
     "Recommendations": make_state("Recommendations"),
+    "FailedLogin": make_state("FailedLogin"),
+    "SuccessfulLogin": make_state("SuccessfulLogin"),
     "Facts": FactState,
     "BookRecommendations": BookRecommendationState,
     "SeriesRecommendations": SeriesRecommendationState,
@@ -54,4 +58,5 @@ states_by_name: dict[str, type[BaseState]] = {
     "Quiz": QuizState,
     "AppDownload": AppDownloadState,
     "Subscribe": SubscribeState,
+    "Login": LoginState,
 }

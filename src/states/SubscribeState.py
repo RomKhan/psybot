@@ -22,17 +22,18 @@ class SubscribeState(BaseState):
             self.message = self.data["message2"]
             del self.buttons[0]
         else:
-            self.url = generate_prodamus_link(user.id)
+            self.url = generate_prodamus_link(user.id)  # type: ignore
             self.button = InlineKeyboardButton(text=self.buttons[0][1], url=self.url)
-            del self.buttons[1]
 
     def get_buttons(self) -> ReplyMarkupType:
         if self.button is None:
             return super().get_buttons()
         res = InlineKeyboardMarkup(row_width=2)
-        res.insert(InlineKeyboardButton(text=self.buttons[0][0], callback_data=self.buttons[0][0]))
+        logged_in = self.user.linked_user is not None
+        first_button = self.buttons[logged_in][0]
+        res.insert(InlineKeyboardButton(text=first_button, callback_data=first_button))
         res.insert(self.button)
-        res.add(InlineKeyboardButton(text=self.buttons[1][0], callback_data=self.buttons[1][0]))
+        res.add(InlineKeyboardButton(text=self.buttons[2][0], callback_data=self.buttons[2][0]))
         return res
 
     def inactive_buttons(self) -> InlineKeyboardMarkup | None:
@@ -42,3 +43,10 @@ class SubscribeState(BaseState):
             return res
         else:
             return None
+
+    def next_state(self) -> str | None:
+        if self.text == "Выйти из аккаунта":
+            self.user.linked_user = None
+            return self.name
+
+        return super().next_state()

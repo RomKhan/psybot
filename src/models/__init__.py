@@ -1,4 +1,12 @@
-from quizlib.models import ActionLog, Article, Quiz, QuizResult, Recommendation, Technique
+from quizlib.models import (
+    ActionLog,
+    AndroidUser,
+    Article,
+    Quiz,
+    QuizResult,
+    Recommendation,
+    Technique,
+)
 from quizlib.models import TelegramUser as User
 
 from ..database import Base, engine
@@ -13,6 +21,7 @@ __all__ = [
     "QuizAnswer",
     "QuizResult",
     "Recommendation",
+    "AndroidUser",
 ]
 
 Base.metadata.create_all(engine)
