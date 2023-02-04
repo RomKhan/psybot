@@ -22,7 +22,10 @@ class SubscribeState(BaseState):
             self.message = self.data["message2"]
             del self.buttons[0]
         else:
-            self.url = generate_prodamus_link(user.id)  # type: ignore
+            email = ""
+            if user.linked_user:
+                email = user.linked_user.email
+            self.url = generate_prodamus_link(user.id, email)  # type: ignore
             self.button = InlineKeyboardButton(text=self.buttons[0][1], url=self.url)
 
     def get_buttons(self) -> ReplyMarkupType:
