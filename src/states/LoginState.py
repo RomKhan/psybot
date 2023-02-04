@@ -7,6 +7,24 @@ from ..models import ActionLog, AndroidUser, User
 from .BaseState import BaseState
 
 
+class FailedLoginState(BaseState):
+    name = "FailedLogin"
+
+    def log(self, next_name: str | None = None) -> ActionLog:
+        res = super().log(next_name)
+        res.button_text = "{{SECRET}}"  # type: ignore
+        return res
+
+
+class SuccessfulLoginState(BaseState):
+    name = "SuccessfulLogin"
+
+    def log(self, next_name: str | None = None) -> ActionLog:
+        res = super().log(next_name)
+        res.button_text = "{{SECRET}}"  # type: ignore
+        return res
+
+
 class LoginState(BaseState):
     name = "Login"
 
@@ -30,11 +48,6 @@ class LoginState(BaseState):
         self.name = f"{self.name}/{self.email}"
         self.message = self.data["message2"].replace("{{EMAIL}}", self.email)
 
-    def log(self, next_name: str | None = None) -> ActionLog:
-        res = super().log(next_name)
-        res.button_text = "{{SECRET}}"  # type: ignore
-        return res
-
     def next_state(self) -> str | None:
         res = super().next_state()
         if res:
@@ -43,9 +56,9 @@ class LoginState(BaseState):
         if self.email:
             if self.check_password(self.text):
                 self.user.linked_user = self.android_user
-                return "SuccessfulLogin"
+                return SuccessfulLoginState.name
             else:
-                return "FailedLogin"
+                return FailedLoginState.name
 
         if re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", self.text):
             return f"{self.name}/{self.text}"
