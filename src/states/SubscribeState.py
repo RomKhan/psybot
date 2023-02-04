@@ -1,5 +1,5 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from quizlib.util import generate_prodamus_link
+from quizlib.api import generate_prodamus_link
 
 from ..models import User
 from ..util import ReplyMarkupType
