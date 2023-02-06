@@ -9,7 +9,7 @@
       "В начало"
     ]
   ],
-  "message": "Вот список статей в категории «{{CATEGORY}}»",
+  "message": "Нажмите случайный выбор или введите номер статьи",
   "one_time_keyboard": false,
   "transitions": {
     "/start": "Start",

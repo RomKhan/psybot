@@ -9,7 +9,7 @@
       "В начало"
     ]
   ],
-  "message": "Вот список техник в категории «{{CATEGORY}}»",
+  "message": "Нажмите случайный выбор или введите номер техники",
   "one_time_keyboard": false,
   "transitions": {
     "/start": "Start",
