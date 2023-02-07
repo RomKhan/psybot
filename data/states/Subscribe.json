@@ -19,6 +19,7 @@
     "/start": "Start",
     "В начало": "Start",
     "Войти в аккаунт": "Login",
-    "Отменить": "Unsubscribe"
+    "Отменить": "Unsubscribe",
+    "Подписка": "THIS"
   }
 }
