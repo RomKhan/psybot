@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "patternProperties": {
+    "^message[0-9]+$": {
+      "type": "string"
+    }
+  },
+  "properties": {
+    "buttons": {
+      "oneOf": [
+        {
+          "items": {
+            "items": {
+              "anyOf": [
+                {
+                  "pattern": "^([а-яёА-ЯЁ ]+)|(PLACEHOLDER)$"
+                },
+                {
+                  "format": "uri"
+                }
+              ],
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "inline_buttons": {
+      "type": "boolean"
+    },
+    "message": {
+      "type": "string"
+    },
+    "one_time_keyboard": {
+      "type": "boolean"
+    },
+    "transitions": {
+      "additionalProperties": false,
+      "patternProperties": {
+        "^([а-яёА-ЯЁ ]+)|(PLACEHOLDER)$": {
+          "pattern": "^[A-Z][a-zA-Z]+$",
+          "type": "string"
+        }
+      },
+      "properties": {
+        "/start": {
+          "const": "Start"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "buttons",
+    "message",
+    "transitions"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "author": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "docx_url": {
+      "format": "uri",
+      "pattern": "^https://docs.google.com/document/d/",
+      "type": "string"
+    },
+    "featured_image": {
+      "type": "string"
+    },
+    "needs_subscription": {
+      "type": "boolean"
+    },
+    "short_description": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "url": {
+      "format": "uri",
+      "type": "string"
+    }
+  },
+  "required": [
+    "author",
+    "category",
+    "content",
+    "date",
+    "docx_url",
+    "title",
+    "url"
+  ],
+  "type": "object"
+}

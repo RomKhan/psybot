@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "image_url": {
+      "format": "uri",
+      "type": "string"
+    },
+    "lessons": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "quiz_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "description",
+          "name",
+          "quiz_name"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "name": {
+      "type": "string"
+    },
+    "needs_subscription": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "description",
+    "duration",
+    "image_url",
+    "lessons",
+    "name",
+    "needs_subscription"
+  ],
+  "type": "object"
+}

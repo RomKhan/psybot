@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "items": {
+    "additionalProperties": false,
+    "properties": {
+      "author": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "content": {
+        "type": "string"
+      },
+      "country": {
+        "type": "string"
+      },
+      "duration": {
+        "type": "string"
+      },
+      "episodes": {
+        "type": "integer"
+      },
+      "extra_content": {
+        "type": "string"
+      },
+      "genre": {
+        "type": "string"
+      },
+      "image_urls": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "needs_subscription": {
+        "type": "boolean"
+      },
+      "title": {
+        "type": "string"
+      },
+      "year": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "author",
+      "content",
+      "image_urls",
+      "needs_subscription",
+      "title"
+    ],
+    "type": "object"
+  },
+  "type": "array"
+}

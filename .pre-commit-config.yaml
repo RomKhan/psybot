@@ -52,6 +52,29 @@ repos:
       args:
        - --max-line-length=100
 
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.21.0
+    hooks:
+      - id: check-jsonschema
+        name: Validate states with jsonschema
+        files: ^data/states/.*\.json$
+        args: ["--schemafile", "schemas/state.json"]
+      - id: check-jsonschema
+        name: Validate articles with jsonschema
+        files: ^data/(articles|techniques)/.*/.*\.json$
+        args: ["--schemafile", "schemas/article.json"]
+      - id: check-jsonschema
+        name: Validate recommendations with jsonschema
+        files: ^data/recommendations/.*\.json$
+        args: ["--schemafile", "schemas/recommendation.json"]
+      - id: check-jsonschema
+        name: Validate courses with jsonschema
+        files: ^data/courses/.*\.json$
+        args: ["--schemafile", "schemas/course.json"]
+      - id: check-metaschema
+        files: ^schemas/.*\.json$
+
+
   # way too slow
   # - repo: https://github.com/hadolint/hadolint
   #   rev: v2.12.0
