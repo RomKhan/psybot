@@ -5,6 +5,7 @@ from ..database import session
 from ..models import Technique
 from ..util import ReplyMarkupType
 from .ArticleState import ArticleCategoryState
+from .CategoryState import Categorizable
 from .LikeableState import LikeableState
 
 
@@ -20,9 +21,9 @@ def list_categories() -> Collection[str]:
 
 
 @lru_cache
-def techniques_by_cat(category: str, subscription: bool = False) -> list[tuple[int, str]]:
+def techniques_by_cat(category: str, subscription: bool = False) -> list[Categorizable]:
     return [
-        (id, title)
+        Categorizable(id, cat, title, sub)
         for id, cat, title, sub in list_techniques()
         if cat == category and (subscription or not sub)
     ]
@@ -40,11 +41,11 @@ class TechniqueCategoryState(ArticleCategoryState):
 
     selected_article: Technique | None
 
-    def get_items(self) -> list[tuple[int, str]]:
+    def get_items(self) -> list[Categorizable]:
         return techniques_by_cat(self.category, self.user.is_subscribed())
 
     def get_article(self) -> Technique:
-        return get_technique(self.items[self.item_number][0])
+        return get_technique(self.items[self.item_number].id)
 
     def get_buttons(self) -> ReplyMarkupType:
         # todo: use both keyboards

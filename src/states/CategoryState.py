@@ -1,5 +1,15 @@
+from dataclasses import dataclass
+
 from ..models import User
 from .PageableState import PageableState
+
+
+@dataclass(order=True)
+class Categorizable:
+    id: int
+    category: str
+    title: str
+    needs_subscription: bool = False
 
 
 class CategoryState(PageableState):
@@ -7,10 +17,10 @@ class CategoryState(PageableState):
     start_button = ""
     is_random = False
 
-    items: list[tuple[int, str]]
+    items: list[Categorizable]
 
-    def get_headline(self, article: tuple[int, str]) -> str:
-        return article[1]
+    def get_headline(self, item: Categorizable) -> str:
+        return item.title + (" 🟡" if item.needs_subscription else "")
 
     def __init__(self, user: User, text: str) -> None:
         self.category = ""

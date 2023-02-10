@@ -1,10 +1,15 @@
+import time
 from functools import lru_cache
 from typing import Collection
+from urllib.parse import urlencode
+
+from quizlib.util import hmac_sign
 
 from ..database import session
+from ..environment import SERVER_URL
 from ..models import Article, Technique
 from ..util import ReplyMarkupType
-from .CategoryState import CategoryState
+from .CategoryState import Categorizable, CategoryState
 from .LikeableState import LikeableState
 
 
@@ -20,9 +25,9 @@ def list_categories() -> Collection[str]:
 
 
 @lru_cache
-def articles_by_cat(category: str, subscription: bool = False) -> list[tuple[int, str]]:
+def articles_by_cat(category: str, subscription: bool = False) -> list[Categorizable]:
     return [
-        (id, title)
+        Categorizable(id, cat, title, sub)
         for id, cat, title, sub in list_articles()
         if cat == category and (subscription or not sub)
     ]
@@ -33,6 +38,17 @@ def get_article(id: int) -> Article:
     return session.query(Article).get(id)
 
 
+def get_article_url(article: Article | Technique) -> str:
+    if not article.needs_subscription:
+        return article.article_url
+
+    data: dict[str, str] = {}
+    data["id"] = str(article.id)
+    data["date"] = str(int(time.time()))
+    data["signature"] = hmac_sign(data)
+    return f"{SERVER_URL}/exclusive/article?{urlencode(data)}"
+
+
 class ArticleCategoryState(CategoryState):
     name = "ArticleCategory"
     random_button = "Случайная статья"
@@ -40,11 +56,11 @@ class ArticleCategoryState(CategoryState):
 
     selected_article: Article | Technique | None = None
 
-    def get_items(self) -> list[tuple[int, str]]:
+    def get_items(self) -> list[Categorizable]:
         return articles_by_cat(self.category, self.user.is_subscribed())
 
     def get_article(self) -> Article | Technique:
-        return get_article(self.items[self.item_number][0])
+        return get_article(self.items[self.item_number].id)
 
     def print_item(self) -> str:
         article = self.get_article()
@@ -54,7 +70,7 @@ class ArticleCategoryState(CategoryState):
             f"{self.item_name} №{self.item_number+1} в категории «{self.category}»",
             article.title,
             text,
-            f"Чиатать полную весрию: {article.article_url}",
+            f"Чиатать полную весрию: {get_article_url(article)}",
         ]
         return "\n\n".join(res)
 

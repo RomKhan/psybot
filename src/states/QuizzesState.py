@@ -7,7 +7,7 @@ from quizlib.util import humanize_category_name
 from ..database import session
 from ..models import Quiz
 from ..util import ReplyMarkupType
-from .CategoryState import CategoryState
+from .CategoryState import Categorizable, CategoryState
 from .LikeableState import BaseModel, LikeableState
 from .QuizState import QuizState
 
@@ -24,9 +24,9 @@ def list_categories() -> Collection[str]:
 
 
 @lru_cache
-def quizzes_by_cat(category: str, subscription: bool = False) -> list[tuple[int, str]]:
+def quizzes_by_cat(category: str, subscription: bool = False) -> list[Categorizable]:
     return [
-        (id, title)
+        Categorizable(id, cat, title, sub)
         for id, cat, title, sub in list_quizzes()
         if cat == category and (subscription or not sub)
     ]
@@ -48,11 +48,11 @@ class QuizCategoryState(CategoryState):
         category = humanize_category_name(self.category)
         return super().get_message().replace(self.category, category)
 
-    def get_items(self) -> list[tuple[int, str]]:
+    def get_items(self) -> list[Categorizable]:
         return quizzes_by_cat(self.category, self.user.is_subscribed())
 
     def print_item(self) -> str:
-        quiz = get_quiz(self.items[self.item_number][0])
+        quiz = get_quiz(self.items[self.item_number].id)
         self.selected_quiz = quiz
         category = humanize_category_name(self.category)
         res = [
@@ -71,7 +71,7 @@ class QuizCategoryState(CategoryState):
 
     def action(self, action: str, pram: int) -> None:
         if action == "show":
-            self.item_number = next(i for i, (id, _) in enumerate(self.items) if id == pram)
+            self.item_number = next(i for i, item in enumerate(self.items) if item.id == pram)
             self.text = str(self.item_number + 1)
             self.message = self.compute_message()
         else:
