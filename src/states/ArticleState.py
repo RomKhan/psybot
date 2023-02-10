@@ -70,7 +70,7 @@ class ArticleCategoryState(CategoryState):
             f"{self.item_name} №{self.item_number+1} в категории «{self.category}»",
             article.title,
             text,
-            f"Чиатать полную весрию: {get_article_url(article)}",
+            f"Читать полную весрию: {get_article_url(article)}",
         ]
         return "\n\n".join(res)
 
