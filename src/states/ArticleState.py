@@ -46,7 +46,7 @@ def get_article_url(article: Article | Technique) -> str:
     data["id"] = str(article.id)
     data["date"] = str(int(time.time()))
     data["signature"] = hmac_sign(data)
-    return f"{SERVER_URL}/exclusive/article?{urlencode(data)}"
+    return f"{SERVER_URL}exclusive/article?{urlencode(data)}"
 
 
 class ArticleCategoryState(CategoryState):
