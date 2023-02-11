@@ -25,11 +25,11 @@ def list_categories() -> Collection[str]:
 
 
 @lru_cache
-def articles_by_cat(category: str, subscription: bool = False) -> list[Categorizable]:
+def articles_by_cat(category: str) -> list[Categorizable]:
     return [
         Categorizable(id, cat, title, sub)
         for id, cat, title, sub in list_articles()
-        if cat == category and (subscription or not sub)
+        if cat == category
     ]
 
 
@@ -57,13 +57,16 @@ class ArticleCategoryState(CategoryState):
     selected_article: Article | Technique | None = None
 
     def get_items(self) -> list[Categorizable]:
-        return articles_by_cat(self.category, self.user.is_subscribed())
+        return articles_by_cat(self.category)
 
     def get_article(self) -> Article | Technique:
         return get_article(self.items[self.item_number].id)
 
     def print_item(self) -> str:
         article = self.get_article()
+        if article.needs_subscription and not self.is_subscribed:
+            return self.data["message403"]
+
         self.mark_as_read(article)
         text = " ".join(article.content.split()[:50])
         res = [

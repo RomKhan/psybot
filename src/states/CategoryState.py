@@ -18,12 +18,21 @@ class CategoryState(PageableState):
     is_random = False
 
     items: list[Categorizable]
+    is_subscribed: bool
 
     def get_headline(self, item: Categorizable) -> str:
-        return item.title + (" 🟡" if item.needs_subscription else "")
+        icon = ""
+        if item.needs_subscription:
+            if self.is_subscribed:
+                icon = " 🟡"
+            else:
+                icon = " ⛔"
+
+        return item.title + icon
 
     def __init__(self, user: User, text: str) -> None:
         self.category = ""
+        self.is_subscribed = user.is_subscribed()
         super().__init__(user, text)
 
     def set_substate(self, *args: str) -> None:

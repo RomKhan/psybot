@@ -24,11 +24,11 @@ def list_categories() -> Collection[str]:
 
 
 @lru_cache
-def quizzes_by_cat(category: str, subscription: bool = False) -> list[Categorizable]:
+def quizzes_by_cat(category: str) -> list[Categorizable]:
     return [
         Categorizable(id, cat, title, sub)
         for id, cat, title, sub in list_quizzes()
-        if cat == category and (subscription or not sub)
+        if cat == category
     ]
 
 
@@ -49,10 +49,13 @@ class QuizCategoryState(CategoryState):
         return super().get_message().replace(self.category, category)
 
     def get_items(self) -> list[Categorizable]:
-        return quizzes_by_cat(self.category, self.user.is_subscribed())
+        return quizzes_by_cat(self.category)
 
     def print_item(self) -> str:
         quiz = get_quiz(self.items[self.item_number].id)
+        if quiz.needs_subscription and not self.is_subscribed:
+            return self.data["message403"]
+
         self.selected_quiz = quiz
         category = humanize_category_name(self.category)
         res = [
