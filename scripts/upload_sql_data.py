@@ -82,8 +82,6 @@ with open(f"{DATA_DIR}/facts.json") as f:
             title = fact
             for sep in ["\n", ". ", " - ", " – ", " — "]:
                 title = title.split(sep)[0]
-            if len(title) > 100:
-                title = None
 
             session.add(Fact(author=author, content=fact, title=title))
 
