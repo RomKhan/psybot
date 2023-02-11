@@ -2,6 +2,7 @@ from quizlib.models import (
     ActionLog,
     AndroidUser,
     Article,
+    Order,
     Quiz,
     QuizResult,
     Recommendation,
@@ -22,6 +23,7 @@ __all__ = [
     "QuizResult",
     "Recommendation",
     "AndroidUser",
+    "Order",
 ]
 
 Base.metadata.create_all(engine)

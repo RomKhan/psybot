@@ -1,7 +1,11 @@
+from datetime import timedelta
+
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from quizlib.api import generate_prodamus_link
+from sqlalchemy import desc
 
-from ..models import User
+from ..database import session
+from ..models import Order, User
 from ..util import ReplyMarkupType
 from .BaseState import BaseState
 
@@ -26,6 +30,19 @@ class SubscribeState(BaseState):
                 email = user.linked_user.email
             self.url = generate_prodamus_link(user.id, email)  # type: ignore
             self.button = InlineKeyboardButton(text=self.buttons[0][1], url=self.url)
+
+    def get_message(self) -> str:
+        if self.is_subscribed:
+            cond = Order.user_id == self.user.id
+            if self.user.linked_user:
+                cond |= Order.user_id == self.user.linked_user.id
+            cond &= Order.last_updated != None  # noqa: E711
+            order = session.query(Order).filter(cond).order_by(desc(Order.last_updated)).first()
+            date = order.last_updated + timedelta(days=30)
+
+            return self.message + f"\n\nДата следующей оплаты: {date}"
+
+        return super().get_message()
 
     def get_buttons(self) -> ReplyMarkupType:
         res = InlineKeyboardMarkup(row_width=2)
