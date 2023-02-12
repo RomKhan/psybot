@@ -45,6 +45,7 @@ states_by_name: dict[str, type[BaseState]] = {
     "Start": make_state("Start"),
     "NotImplemented": make_state("NotImplemented"),
     "Recommendations": make_state("Recommendations"),
+    "Contact": make_state("Contact"),
     "FailedLogin": FailedLoginState,
     "SuccessfulLogin": SuccessfulLoginState,
     "Facts": FactState,
