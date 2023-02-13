@@ -10,7 +10,7 @@
     ]
   ],
   "inline_buttons": true,
-  "message": "Вопрос №{{INDEX}} теста «{{NAME}}»",
+  "message": "Вопрос №{{INDEX}} (из {{TOTAL}}) теста «{{NAME}}»",
   "transitions": {
     "/start": "Start",
     "PLACEHOLDER": "NotImplemented",

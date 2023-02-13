@@ -47,6 +47,7 @@ class QuizState(BaseState):
 
         res = super().get_message()
         res = res.replace("{{INDEX}}", str(self.question_index + 1))
+        res = res.replace("{{TOTAL}}", str(self.num_questions))
         res = res.replace("{{NAME}}", str(self.quiz.name))
         res += f"\n\n{self.get_question()}"
 
