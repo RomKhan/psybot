@@ -129,6 +129,9 @@ for file in glob(f"{DATA_DIR}/courses/*.json"):
             quiz_key = ("InternalCourses", lesson["quiz_name"])
             quiz = quizzes_dict.get(quiz_key)  # type: ignore
 
+            if lesson.get("image_url"):
+                lesson["image_url"] = urljoin(ARTICLES_SITE, lesson["image_url"])
+
             if quiz is None:
                 # todo: acctually implement all the quizzes
                 quiz = quizzes_dict[("InternalCourses", "КурсМанипуляции_Урок1")]  # type: ignore
