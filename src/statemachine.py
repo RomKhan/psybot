@@ -44,6 +44,8 @@ def next_state(text: str, from_id: int, date: Optional[datetime] = None):
     user = get_user(from_id, date)
     state = deserialize_state(user.state_name, user, text)
     name = state.next_state()
+    if name is None:
+        name = deserialize_state("Start", user, text).next_state()
 
     if is_valid_state(name):
         next_state = deserialize_state(name, user, text)
