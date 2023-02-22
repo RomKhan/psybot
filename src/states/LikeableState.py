@@ -25,12 +25,14 @@ class LikeableState(ABC, BaseState):
         self.selected_item = None
         super().__init__(user, text)
 
+        # todo: only truncate data
         categories = sorted(self.list_categories())
-        self.buttons = [[e] for e in categories] + [[flatten(self.buttons)[-1]]]
+        truncated_categories = [cat[:32] for cat in categories]
+        self.buttons = [[e] for e in truncated_categories] + [[flatten(self.buttons)[-1]]]
 
         self.transitions = self.transitions.copy()
-        for e in categories:
-            self.transitions[e] = f"{self.substate.name}/{e}"
+        for cat, tr in zip(categories, truncated_categories):
+            self.transitions[tr] = f"{self.substate.name}/{cat}"
 
     def action(self, action: str, pram: int) -> None:
         if action == "like":

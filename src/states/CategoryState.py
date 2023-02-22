@@ -38,6 +38,7 @@ class CategoryState(PageableState):
     def set_substate(self, *args: str) -> None:
         assert len(args) == 1
         self.start_button = self.category = args[0]
+        self.start_button = self.start_button[:32]
         self.name = f"{self.name}/{self.category}"
         self.reload_items()
 
