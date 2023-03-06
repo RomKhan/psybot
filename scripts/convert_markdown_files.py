@@ -24,7 +24,7 @@ def get_short_description(content: str, title: str) -> str | None:
             return desc
 
     content = re.sub(r"^#[^\n]+\n", "", content.strip()).strip()
-    m = re.match(r"^[^.]+\. ", content)
+    m = re.match(r"^[^.]+\.\s", content)
     if m:
         desc = m.group(0).strip()
         desc = re.sub(r"[\n ]+", " ", desc)
