@@ -65,6 +65,8 @@ for file in glob(f"{QUIZ_DIR}/*/*.json"):
 
         if obj.get("image_url"):
             item["image_url"] = urljoin(ARTICLES_SITE, obj["image_url"])
+        if obj.get("questions_metadata"):
+            item["questions_metadata"] = obj["questions_metadata"]
 
         key = (item["category"], item["filename"])
         if key in quizzes_dict:
