@@ -57,9 +57,7 @@ class LikeableState(ABC, BaseState):
         name = cls.name
         id = item.id
         likes = item.likes
-        dislikes = -likes if likes < 0 else ""
         likes = likes if likes > 0 else ""
 
-        btn1 = InlineKeyboardButton(text=f"👍 {likes}", callback_data=f"{name}/like:{id}")
-        btn2 = InlineKeyboardButton(text=f"👎 {dislikes}", callback_data=f"{name}/dislike:{id}")
-        return InlineKeyboardMarkup(inline_keyboard=[[btn1, btn2]])
+        btn = InlineKeyboardButton(text=f"👍 {likes}", callback_data=f"{name}/like:{id}")
+        return InlineKeyboardMarkup(inline_keyboard=[[btn]])
