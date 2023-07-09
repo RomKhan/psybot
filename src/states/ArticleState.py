@@ -62,6 +62,7 @@ class ArticleCategoryState(CategoryState):
     def get_article(self) -> Article | Technique:
         return get_article(self.items[self.item_number].id)
 
+
     def print_item(self) -> str:
         article = self.get_article()
         if article.needs_subscription and not self.is_subscribed:
@@ -70,10 +71,12 @@ class ArticleCategoryState(CategoryState):
         self.mark_as_read(article)
         text = " ".join(article.content.split()[:50])
         res = [
+            f'<a href="{article.image_url}">  </a>',
             f"{self.item_name} №{self.item_number+1} в категории «{self.category}»",
             article.title,
             text,
             f"Читать полную весрию: {get_article_url(article)}",
+
         ]
         return "\n\n".join(res)
 
