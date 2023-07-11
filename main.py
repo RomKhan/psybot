@@ -45,11 +45,14 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
 @dp.message_handler()
 async def handle_message(message: types.Message):
     state = next_state_msg(message)
-    await message.answer(
-        state.get_message(), reply_markup=state.get_buttons(), parse_mode=ParseMode.HTML
-    )
-    # img_url = 'https://i.stack.imgur.com/L44O9.png'
-    # await bot.send_message(message.chat.id, f'hello<a href="{img_url}">  </a>', parse_mode=ParseMode.HTML)
+    if state.name == "Facts":
+        await message.answer(
+            state.get_message(), reply_markup=state.get_buttons(), disable_web_page_preview=True
+        )
+    else:
+        await message.answer(
+            state.get_message(), reply_markup=state.get_buttons(), parse_mode=ParseMode.HTML
+        )
 
 
 if __name__ == "__main__":

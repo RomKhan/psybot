@@ -19,6 +19,7 @@ ReplyMarkupType = typing.Union[
 
 oops_message = "Что-то пошло не так!🙄😱"
 
+messages = {"oops_message": "Что-то пошло не так!🙄😱", "wrong_input": "Такого варианта нет!😤"}
 
 @lru_cache
 def load_data_file(type: str, name: str) -> dict[str, typing.Any]:

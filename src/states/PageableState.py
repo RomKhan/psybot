@@ -6,14 +6,14 @@ from random import Random, randint
 from ..models import User
 from ..util import oops_message
 from .BaseState import BaseState
+from ..util import messages
 
-PAGE_SIZE = 7
+PAGE_SIZE = 8
 
 
 class PageableState(ABC, BaseState):
     random_button: str
     start_button: str
-
     item_number: int
     page_number: int
     items: typing.Sequence[object]
@@ -73,12 +73,12 @@ class PageableState(ABC, BaseState):
             rng = Random()
             rng.seed(index)
             rng.shuffle(seq)
-            return sorted(seq[:PAGE_SIZE])
+            return sorted(seq[:len(self.items)])
         else:
             count = len(self.pageable_items)
-            index = index % ceil(count / PAGE_SIZE)
-            end = min((index + 1) * PAGE_SIZE, count)
-            start = index * PAGE_SIZE
+            index = index % ceil(count / len(self.items))
+            end = min((index + 1) * len(self.items), count)
+            start = index * len(self.items)
             return self.pageable_items[start:end]
 
     def print_page(self) -> str:
@@ -97,7 +97,7 @@ class PageableState(ABC, BaseState):
         if self.text.isdigit():
             self.item_number = int(self.text) - 1
             if self.item_number < 0 or self.item_number >= len(self.items):
-                return oops_message
+                return messages.get("wrong_input")
             return self.print_item()
 
         match self.text:
@@ -107,4 +107,4 @@ class PageableState(ABC, BaseState):
             case self.random_button:
                 return self.print_item()
             case _:
-                return oops_message
+                return messages.get("oops_message")
