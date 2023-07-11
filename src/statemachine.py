@@ -8,6 +8,7 @@ from .database import session
 from .models import User
 from .states import BaseState, states_by_name
 from .util import oops_message
+from .util import messages
 
 
 def get_user(id: int, date: Optional[datetime] = None) -> User:
@@ -53,7 +54,7 @@ def next_state(text: str, from_id: int, date: Optional[datetime] = None):
         session.add(next_state.log())
     else:
         next_state = state
-        state.message = oops_message
+        state.message = messages.get("wrong_input")
         session.add(next_state.log("/error"))
 
     user.state_name = next_state.name

@@ -97,9 +97,8 @@ class PageableState(ABC, BaseState):
         if self.text.isdigit():
             self.item_number = int(self.text) - 1
             if self.item_number < 0 or self.item_number >= len(self.items):
-                return messages.get("wrong_input")
+                return messages.get("wrong_number")
             return self.print_item()
-
         match self.text:
             case "Предыдущая страница" | "Следующая страница" | self.start_button:
                 msg = self.message.replace("{{COUNT}}", str(len(self.items)))
@@ -107,4 +106,4 @@ class PageableState(ABC, BaseState):
             case self.random_button:
                 return self.print_item()
             case _:
-                return messages.get("oops_message")
+                return messages.get("wrong_input")
