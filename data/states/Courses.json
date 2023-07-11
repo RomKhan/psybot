@@ -1,0 +1,17 @@
+{
+  "buttons": [
+    [
+      "PLACEHOLDER"
+    ],
+    [
+      "В начало"
+    ]
+  ],
+  "inline_buttons": true,
+  "message": "Курс",
+  "transitions": {
+    "/start": "Start",
+    "PLACEHOLDER": "NotImplemented",
+    "В начало": "Start"
+  }
+}

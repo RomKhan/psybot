@@ -34,6 +34,7 @@ __all__ = [
     "SubscribeState",
     "LoginState",
     "UnsubscribeState",
+    "CourseState",
 ]
 
 

@@ -30,6 +30,7 @@ class BaseState:
         self.text = text.strip()
 
         data = load_data_file("states", self.name)
+        print(self.name)
         self.message = data["message"]
         self.buttons = data["buttons"] or []
         self.transitions = data["transitions"]
@@ -41,6 +42,7 @@ class BaseState:
         return self.message
 
     def get_buttons(self) -> ReplyMarkupType:
+        print(self.buttons)
         if not self.buttons:
             return ReplyKeyboardRemove()
         elif self.inline_buttons:
