@@ -14,6 +14,3 @@ class ChooseCourseState(BaseState):
         res = InlineKeyboardMarkup(row_width=1)
         res.add(InlineKeyboardButton(text=self.buttons[1][0], callback_data=self.buttons[1][0]))
         return res
-
-    def get_message(self) -> str:
-        return "КУРСЫ"
