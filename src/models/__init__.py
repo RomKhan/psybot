@@ -7,6 +7,8 @@ from quizlib.models import (
     QuizResult,
     Recommendation,
     Technique,
+    Course,
+    Lesson,
 )
 from quizlib.models import TelegramUser as User
 
@@ -24,6 +26,8 @@ __all__ = [
     "Recommendation",
     "AndroidUser",
     "Order",
+    "Lesson",
+    "Course",
 ]
 
 Base.metadata.create_all(engine)

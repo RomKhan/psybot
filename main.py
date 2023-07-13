@@ -36,6 +36,7 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
         else:
             actions.append(msg.edit_reply_markup(keyboard))
     else:
+
         actions.append(bot.send_message(msg.chat.id, text, reply_markup=keyboard))
         actions.append(msg.edit_reply_markup(state.inactive_buttons()))
 

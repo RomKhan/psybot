@@ -7,7 +7,6 @@ from aiogram.types import Message
 from .database import session
 from .models import User
 from .states import BaseState, states_by_name
-from .util import oops_message
 from .util import messages
 
 

@@ -17,6 +17,7 @@ def list_techniques() -> list[tuple[int, str, str, bool]]:
 
 @lru_cache
 def list_categories() -> Collection[str]:
+    print(list_techniques())
     return set(e[1] for e in list_techniques())
 
 
