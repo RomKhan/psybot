@@ -100,7 +100,7 @@ class PageableState(ABC, BaseState):
                 return messages.get("wrong_number")
             return self.print_item()
         match self.text:
-            case "Предыдущая страница" | "Следующая страница" | self.start_button:
+            case  "Предыдущая страница" | "Следующая страница" | self.start_button:
                 msg = self.message.replace("{{COUNT}}", str(len(self.items)))
                 return f"{msg}\n\n{self.print_page()}"
             case self.random_button:

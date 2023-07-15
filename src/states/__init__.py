@@ -13,8 +13,8 @@ from .SeriesRecommendationState import SeriesRecommendationState
 from .SubscribeState import SubscribeState
 from .TechniqueState import TechniqueCategoryState, TechniqueState
 from .UnsubscribeState import UnsubscribeState
-from .LessonState import LessonState
 from .ChooseCourseState import ChooseCourseState
+from .CourseState import CourseState
 
 __all__ = [
     "BaseState",
@@ -37,6 +37,7 @@ __all__ = [
     "LoginState",
     "UnsubscribeState",
     "ChooseCourseState",
+    "CourseState",
 ]
 
 
@@ -67,4 +68,5 @@ states_by_name: dict[str, type[BaseState]] = {
     "Login": LoginState,
     "Unsubscribe": UnsubscribeState,
     "Courses": ChooseCourseState,
+    "Course": CourseState,
 }
