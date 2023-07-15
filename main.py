@@ -46,15 +46,14 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
 @dp.message_handler()
 async def handle_message(message: types.Message):
     state = next_state_msg(message)
-    if state.name == "Facts":
-        await message.answer(
-            state.get_message(), reply_markup=state.get_buttons(), disable_web_page_preview=True
-        )
+    text = state.get_message()
+    if len(text) > 4096:
+        for x in range(0, len(text), 4096):
+            await message.answer(
+                text[x:x + 4096], reply_markup=state.get_buttons(), parse_mode=ParseMode.HTML)
     else:
         await message.answer(
-            state.get_message(), reply_markup=state.get_buttons(), parse_mode=ParseMode.HTML
-        )
-
+            text, reply_markup=state.get_buttons(), parse_mode=ParseMode.HTML)
 
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
