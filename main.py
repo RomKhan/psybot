@@ -4,24 +4,17 @@ import asyncio
 import logging
 import re
 
-from aiogram.dispatcher.filters import Text
-from aiogram.types import ParseMode
+# from aiogram.types import ParseMode
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.utils.callback_data import CallbackData
-
-
-from src.states import PageableState
-
-cb_inline = CallbackData("post", 'action', "data")
-
 from src.environment import API_TOKEN
 from src.statemachine import next_state_msg, process_event, session
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
 # Initialize bot and dispatcher
-bot = Bot(token=API_TOKEN, parse_mode=ParseMode.HTML)
+bot = Bot(token=API_TOKEN, parse_mode=types.ParseMode.HTML)
 dp = Dispatcher(bot)
 
 
@@ -43,11 +36,10 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
             actions.append(msg.edit_text(text, reply_markup=keyboard))
         else:
             actions.append(msg.edit_reply_markup(keyboard))
-    else:
 
+    else:
         actions.append(bot.send_message(msg.chat.id, text, reply_markup=keyboard))
         actions.append(msg.edit_reply_markup(state.inactive_buttons()))
-
     await asyncio.gather(*actions)
 
 
@@ -55,20 +47,17 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
 async def handle_message(message: types.Message):
     state = next_state_msg(message)
     text = state.get_message()
-    parse_mode = ParseMode.MARKDOWN if re.match(r"\ACourse*", state.name) is not None else ParseMode.HTML
+    parse_mode = types.ParseMode.MARKDOWN if re.match(r"\ACourse*", state.name) is not None else types.ParseMode.HTML
     if len(text) > 4096:
         for x in range(0, len(text), 4096):
             await message.answer(
                 text[x:x + 4096], reply_markup=state.get_buttons(), parse_mode=parse_mode)
     else:
         await message.answer(
-            text, reply_markup=state.get_buttons(), parse_mode=parse_mode)
+                text, reply_markup=state.get_buttons(), parse_mode=parse_mode)
 
     if state.need_recommendation and state.recommendation_message != "":
         await bot.send_message(message.chat.id, state.recommendation_message)
-        # await message.answer(
-        #     state.recommendation_message, reply_markup=state.get_buttons(), parse_mode=parse_mode)
-
 
 
 if __name__ == "__main__":

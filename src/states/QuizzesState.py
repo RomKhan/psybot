@@ -46,8 +46,8 @@ class QuizCategoryState(CategoryState):
     selected_quiz: Quiz | None = None
 
     def get_message(self) -> str:
-        category = humanize_category_name(self.category)
-        return super().get_message().replace(self.category, category)
+        # category = humanize_category_name(self.category)
+        return super().get_message().replace(self.category, self.category)
 
     def get_items(self) -> list[Categorizable]:
         return quizzes_by_cat(self.category)
@@ -63,17 +63,15 @@ class QuizCategoryState(CategoryState):
         quiz = get_quiz(self.items[self.item_number].id)
         if quiz.needs_subscription and not self.is_subscribed:
             return self.data["message403"]
-
+        self.print_recommendation()
         self.selected_quiz = quiz
-        category = humanize_category_name(self.category)
         res = [
             f'<a href="{quiz.image_url}">  </a>'
-            f"{self.item_name} №{self.item_number+1} в категории «{category}»",
+            f"{self.item_name} №{self.item_number+1} в категории «{self.category}»",
             quiz.name,
             quiz.description,
             f"Затрата времени: {quiz.time} минут",
         ]
-        self.print_recommendation()
         return "\n\n".join(res)
 
     def get_buttons(self) -> ReplyMarkupType:
@@ -108,7 +106,7 @@ class QuizzesState(LikeableState):
 
         res = InlineKeyboardMarkup(row_width=1)
         for cat in self.list_categories():
-            res.insert(InlineKeyboardButton(text=humanize_category_name(cat), callback_data=cat))
+            res.insert(InlineKeyboardButton(text=cat, callback_data=cat))
         res.add(InlineKeyboardButton(text=self.buttons[-1][0], callback_data=self.buttons[-1][0]))
 
         return res

@@ -1,20 +1,15 @@
 import time
+import markdown
 from functools import lru_cache
 from typing import Collection
 from urllib.parse import urlencode
-
-from aiogram import types
-from aiogram.dispatcher.filters import Text
-from aiogram.types import InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
-
-# from main import dp
-from .RecommendationManager import RecommendationManager
-import markdown
 from quizlib.util import hmac_sign
+
 from ..database import session
 from ..environment import SERVER_URL
 from ..models import Article, Technique
 from ..util import ReplyMarkupType
+from .RecommendationManager import RecommendationManager
 from .CategoryState import Categorizable, CategoryState
 from .LikeableState import LikeableState
 
