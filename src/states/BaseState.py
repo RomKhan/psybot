@@ -22,8 +22,9 @@ class BaseState:
     transitions: dict[str, str]
     inline_buttons: bool
     one_time_keyboard: bool
-
     data: dict[str, Any]
+    need_recommendation = False
+    recommendation_message = ""
 
     def __init__(self, user: User, text: str) -> None:
         self.user = user
@@ -76,6 +77,8 @@ class BaseState:
             new_state_name=next_name,
             button_text=self.text,
         )
+
+
 
     def commit(self) -> None:
         pass

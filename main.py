@@ -2,8 +2,17 @@
 
 import asyncio
 import logging
+import re
+
+from aiogram.dispatcher.filters import Text
 from aiogram.types import ParseMode
 from aiogram import Bot, Dispatcher, executor, types
+from aiogram.utils.callback_data import CallbackData
+
+
+from src.states import PageableState
+
+cb_inline = CallbackData("post", 'action', "data")
 
 from src.environment import API_TOKEN
 from src.statemachine import next_state_msg, process_event, session
@@ -12,7 +21,7 @@ from src.statemachine import next_state_msg, process_event, session
 logging.basicConfig(level=logging.INFO)
 
 # Initialize bot and dispatcher
-bot = Bot(token=API_TOKEN)
+bot = Bot(token=API_TOKEN, parse_mode=ParseMode.HTML)
 dp = Dispatcher(bot)
 
 
@@ -28,7 +37,6 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
     keyboard = state.get_buttons()
     text = state.get_message()
     msg = query.message
-
     actions = [query.answer()]
     if isinstance(keyboard, types.InlineKeyboardMarkup) or keyboard is None:
         if msg.text != text and text:
@@ -47,13 +55,21 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
 async def handle_message(message: types.Message):
     state = next_state_msg(message)
     text = state.get_message()
+    parse_mode = ParseMode.MARKDOWN if re.match(r"\ACourse*", state.name) is not None else ParseMode.HTML
     if len(text) > 4096:
         for x in range(0, len(text), 4096):
             await message.answer(
-                text[x:x + 4096], reply_markup=state.get_buttons(), parse_mode=ParseMode.HTML)
+                text[x:x + 4096], reply_markup=state.get_buttons(), parse_mode=parse_mode)
     else:
         await message.answer(
-            text, reply_markup=state.get_buttons(), parse_mode=ParseMode.HTML)
+            text, reply_markup=state.get_buttons(), parse_mode=parse_mode)
+
+    if state.need_recommendation and state.recommendation_message != "":
+        await bot.send_message(message.chat.id, state.recommendation_message)
+        # await message.answer(
+        #     state.recommendation_message, reply_markup=state.get_buttons(), parse_mode=parse_mode)
+
+
 
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)

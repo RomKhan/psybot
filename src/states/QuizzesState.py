@@ -4,6 +4,7 @@ from typing import Collection
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from quizlib.util import humanize_category_name
 
+from .RecommendationManager import RecommendationManager
 from ..database import session
 from ..models import Quiz
 from ..util import ReplyMarkupType
@@ -51,6 +52,13 @@ class QuizCategoryState(CategoryState):
     def get_items(self) -> list[Categorizable]:
         return quizzes_by_cat(self.category)
 
+    def print_recommendation(self) -> str:
+        try:
+            manager = RecommendationManager(self.selected_quiz.id, "Quiz")
+            return manager.get_message().replace("{{STATE}}", "прохождения теста")
+        except (Exception,):
+            return ""
+
     def print_item(self) -> str:
         quiz = get_quiz(self.items[self.item_number].id)
         if quiz.needs_subscription and not self.is_subscribed:
@@ -59,17 +67,20 @@ class QuizCategoryState(CategoryState):
         self.selected_quiz = quiz
         category = humanize_category_name(self.category)
         res = [
+            f'<a href="{quiz.image_url}">  </a>'
             f"{self.item_name} №{self.item_number+1} в категории «{category}»",
             quiz.name,
             quiz.description,
             f"Затрата времени: {quiz.time} минут",
         ]
+        self.print_recommendation()
         return "\n\n".join(res)
 
     def get_buttons(self) -> ReplyMarkupType:
         # todo: use both keyboards
         if self.selected_quiz:
             return QuizzesState.likes_keyboard(self.selected_quiz)
+
         return super().get_buttons()
 
     def action(self, action: str, pram: int) -> None:

@@ -9,6 +9,7 @@ from quizlib.models import (
     Technique,
     Course,
     Lesson,
+    ModelRecommendation,
 )
 from quizlib.models import TelegramUser as User
 
@@ -28,6 +29,7 @@ __all__ = [
     "Order",
     "Lesson",
     "Course",
+    "ModelRecommendation",
 ]
 
 Base.metadata.create_all(engine)

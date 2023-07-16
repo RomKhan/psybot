@@ -19,3 +19,9 @@ quizlib @ git+ssh://git@github.com/psychological-essence/psychological_essence_q
 SQLAlchemy==1.4.43
 Werkzeug==2.2.2
 yarl==1.8.1
+
+pip~=23.2
+wheel~=0.38.4
+setuptools~=65.5.1
+quizlib~=0.0.45
+Markdown~=3.4.3

@@ -1,8 +1,9 @@
 from abc import ABC
 from functools import lru_cache
 from quizlib.database import session
-
+import markdown
 from .PageableState import PageableState
+from .RecommendationManager import RecommendationManager
 from ..models import Course, Lesson, User
 from ..util import messages
 
@@ -49,25 +50,34 @@ class CourseState(PageableState, ABC):
     def print_item(self) -> str:
         lesson = self.get_lesson()
         self.mark_as_read(lesson)
+
         res = [
-            # f'<a href="{lesson.image_url}">  </a>',
             lesson.name,
             lesson.description,
             lesson.content,
-
         ]
         return "\n\n".join(res)
+
+    def print_recommendation(self) -> str:
+        try:
+            manager = RecommendationManager(self.course.id, "Course")
+            return manager.get_message().replace("{{STATE}}", "прохождения курса")
+        except (Exception,):
+            return ""
 
     def get_message(self) -> str:
         lessons_cnt = len(lessons_by_course(course=self.course.id))
         if self.course.needs_subscription and not self.is_subscribed:
             return self.data["message403"]
+
         if self.text == self.course_name:
                 res = [self.course.description,
                        "# Длительность: " + self.course.duration,
 
                        self.message.replace("{{COUNT}}", str(lessons_cnt))
                        ]
+                self.print_recommendation()
+                self.need_recommendation = True
                 return "\n\n".join(res)
         elif self.text.isdigit() and lessons_cnt >= int(self.text) > 0:
             return self.print_item()

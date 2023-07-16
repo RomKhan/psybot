@@ -3,8 +3,14 @@ from functools import lru_cache
 from typing import Collection
 from urllib.parse import urlencode
 
-from quizlib.util import hmac_sign
+from aiogram import types
+from aiogram.dispatcher.filters import Text
+from aiogram.types import InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
 
+# from main import dp
+from .RecommendationManager import RecommendationManager
+import markdown
+from quizlib.util import hmac_sign
 from ..database import session
 from ..environment import SERVER_URL
 from ..models import Article, Technique
@@ -53,6 +59,7 @@ class ArticleCategoryState(CategoryState):
     name = "ArticleCategory"
     random_button = "Случайная статья"
     item_name = "Статья"
+    recommendation_message = ""
 
     selected_article: Article | Technique | None = None
 
@@ -62,19 +69,26 @@ class ArticleCategoryState(CategoryState):
     def get_article(self) -> Article | Technique:
         return get_article(self.items[self.item_number].id)
 
+    def print_recommendation(self) -> str:
+        try:
+            manager = RecommendationManager(self.selected_article.id, "Article")
+            return manager.get_message().replace("{{STATE}}", "прочтения статьи")
+        except (Exception,):
+            return ""
 
     def print_item(self) -> str:
         article = self.get_article()
         if article.needs_subscription and not self.is_subscribed:
             return self.data["message403"]
-
+        self.need_recommendation = True
         self.mark_as_read(article)
+        self.recommendation_message = self.print_recommendation()
         text = " ".join(article.content.split()[:50])
         res = [
             f'<a href="{article.image_url}">  </a>',
-            f"{self.item_name} №{self.item_number+1} в категории «{self.category}»",
-            article.title,
-            text,
+            f"{self.item_name} №{self.item_number + 1} в категории «{self.category}»",
+            markdown.markdown(article.title)[3:][:-4],
+            markdown.markdown(text)[3:][:-4],
             f"Читать полную весрию: {get_article_url(article)}",
 
         ]
@@ -83,7 +97,8 @@ class ArticleCategoryState(CategoryState):
     def get_buttons(self) -> ReplyMarkupType:
         # todo: use both keyboards
         if self.selected_article:
-            return ArticleState.likes_keyboard(self.selected_article)
+            res = ArticleState.likes_keyboard(self.selected_article)
+            return res
         return super().get_buttons()
 
     def mark_as_read(self, article: Article | Technique) -> None:
