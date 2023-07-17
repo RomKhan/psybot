@@ -1,10 +1,10 @@
 import typing
+
 from abc import ABC, abstractmethod
 from math import ceil
 from random import Random, randint
 
 from ..models import User
-from ..util import oops_message
 from .BaseState import BaseState
 from ..util import messages
 

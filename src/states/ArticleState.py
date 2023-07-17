@@ -1,5 +1,6 @@
 import time
 import markdown
+
 from functools import lru_cache
 from typing import Collection
 from urllib.parse import urlencode

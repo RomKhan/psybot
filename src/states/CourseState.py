@@ -1,8 +1,6 @@
 from abc import ABC
 from functools import lru_cache
-
 from quizlib.database import session
-from quizlib.util import to_english_category_name
 
 from ..models import Course, Lesson, User
 from ..util import messages

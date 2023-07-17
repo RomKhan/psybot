@@ -4,7 +4,6 @@ import asyncio
 import logging
 import re
 
-# from aiogram.types import ParseMode
 from aiogram import Bot, Dispatcher, executor, types
 from src.environment import API_TOKEN
 from src.statemachine import next_state_msg, process_event, session
