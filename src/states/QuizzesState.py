@@ -62,8 +62,10 @@ class QuizCategoryState(CategoryState):
         quiz = get_quiz(self.items[self.item_number].id)
         if quiz.needs_subscription and not self.is_subscribed:
             return self.data["message403"]
-        self.recommendation_message = self.print_recommendation()
+        self.need_recommendation = True
         self.selected_quiz = quiz
+        self.recommendation_message = self.print_recommendation()
+        self.need_recommendation = True
         res = [
             f'<a href="{quiz.image_url}">  </a>'
             f"{self.item_name} №{self.item_number+1} в категории «{self.category}»",

@@ -92,7 +92,7 @@ class RecommendationManager:
         res = ["\n<b>Тесты</b>:\n"]
         for quiz in self.quizzes:
             res.append(f'Тест "{quiz.name}" (Доступен в категории {quiz.category}" раздела "Тесты")')
-        return "\n".join(res)
+        return "\n\n".join(res)
 
     def get_facts_str(self) -> str:
         if len(self.facts) == 0:
@@ -103,15 +103,13 @@ class RecommendationManager:
         return "\n".join(res)
 
     def get_message(self) -> str:
-        res = ["Мы подобрали для вас интересные материалы, с которыми вы можете ознакомиться после {{STATE}}!\n\n"]
-        res += ["<b>Дополнительные материалы для чтения:</b>\n",
-                self.get_articles_str(),
-                self.get_techniques_str(),
-                self.get_courses_str(),
-                self.get_quizzes_str(),
-                self.get_facts_str()
-                ]
-        return "\n".join(res)
+        res = ["Мы подобрали для вас интересные материалы, с которыми вы можете ознакомиться после {{STATE}}!\n\n\n"]
+        res += "<b>Дополнительные материалы для чтения:</b>\n\n" + self.get_articles_str() + "\n\n" if len(self.articles) != 0 else ""
+        res += "<b>Полезные техники:</b>\n" + self.get_techniques_str() + "\n\n" if len(self.techniques) != 0 else ""
+        res += self.get_courses_str() + "\n\n" if len(self.courses) != 0 else ""
+        res += self.get_quizzes_str() + "\n\n" if len(self.quizzes) != 0 else ""
+        res += self.get_facts_str() + "\n\n" if len(self.facts) != 0 else ""
+        return "".join(res)
 
     def get_items(self):
         with urllib.request.urlopen(self.url) as response:

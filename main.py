@@ -33,6 +33,9 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
     if isinstance(keyboard, types.InlineKeyboardMarkup) or keyboard is None:
         if msg.text != text and text:
             actions.append(msg.edit_text(text, reply_markup=keyboard))
+            if state.need_recommendation and state.recommendation_message != "":
+                actions.append(
+                    bot.send_message(msg.chat.id, state.recommendation_message, disable_web_page_preview=True))
         else:
             actions.append(msg.edit_reply_markup(keyboard))
 

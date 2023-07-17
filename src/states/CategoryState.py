@@ -1,3 +1,4 @@
+from abc import ABC
 from dataclasses import dataclass
 
 from ..models import User
@@ -12,7 +13,11 @@ class Categorizable:
     needs_subscription: bool = False
 
 
-class CategoryState(PageableState):
+class CategoryState(PageableState, ABC):
+
+    def print_recommendation(self) -> str:
+        pass
+
     category: str
     start_button = ""
     is_random = False

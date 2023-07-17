@@ -7,6 +7,7 @@ from ..util import ReplyMarkupType
 from .ArticleState import ArticleCategoryState
 from .CategoryState import Categorizable
 from .LikeableState import LikeableState
+from .RecommendationManager import RecommendationManager
 
 
 @lru_cache
@@ -40,6 +41,13 @@ class TechniqueCategoryState(ArticleCategoryState):
     item_name = "Техника"
 
     selected_article: Technique | None
+
+    def print_recommendation(self) -> str:
+        try:
+            manager = RecommendationManager(self.selected_article.id, "Technique")
+            return manager.get_message().replace("{{STATE}}", "ознакомления с техникой")
+        except (Exception,):
+            return ""
 
     def get_items(self) -> list[Categorizable]:
         return techniques_by_cat(self.category, self.user.is_subscribed())

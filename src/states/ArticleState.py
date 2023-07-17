@@ -76,9 +76,9 @@ class ArticleCategoryState(CategoryState):
         article = self.get_article()
         if article.needs_subscription and not self.is_subscribed:
             return self.data["message403"]
-        self.need_recommendation = True
         self.mark_as_read(article)
         self.recommendation_message = self.print_recommendation()
+        self.need_recommendation = True
         text = " ".join(article.content.split()[:50])
         res = [
             f'<a href="{article.image_url}">  </a>',

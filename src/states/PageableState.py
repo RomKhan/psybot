@@ -32,6 +32,10 @@ class PageableState(ABC, BaseState):
     def print_item(self) -> str:
         pass
 
+    @abstractmethod
+    def print_recommendation(self) -> str:
+        pass
+
     def __init__(self, user: User, text: str) -> None:
         super().__init__(user, text)
         self.page_number = user.page_number or 0
