@@ -1,10 +1,9 @@
-from dataclasses import dataclass
-from ..database import Base
+import json
+import urllib.request
+
+from quizlib.models import Course, Quiz, Technique, Fact, Article, ModelRecommendation
 from functools import lru_cache
 from ..database import session
-import json
-from quizlib.models import Course, Quiz, Technique, Fact, Article, ModelRecommendation
-import urllib.request
 
 URL_CONST = "https://psessence.ru/extapi/test/recommendations/"
 

@@ -1,11 +1,14 @@
 from abc import ABC
 from functools import lru_cache
+
 from quizlib.database import session
-import markdown
-from .PageableState import PageableState
-from .RecommendationManager import RecommendationManager
+from quizlib.util import to_english_category_name
+
 from ..models import Course, Lesson, User
 from ..util import messages
+from .PageableState import PageableState
+from .RecommendationManager import RecommendationManager
+
 
 
 @lru_cache
@@ -76,7 +79,7 @@ class CourseState(PageableState, ABC):
 
                        self.message.replace("{{COUNT}}", str(lessons_cnt))
                        ]
-                self.print_recommendation()
+                self.recommendation_message = self.print_recommendation()
                 self.need_recommendation = True
                 return "\n\n".join(res)
         elif self.text.isdigit() and lessons_cnt >= int(self.text) > 0:
@@ -98,5 +101,6 @@ class CourseState(PageableState, ABC):
         self.course_name = args[0]
         self.course = get_course_by_name(self.course_name)
         self.start_button = self.start_button[:32]
+        # todo: translate name
         self.name = f"{self.name}/{self.course_name}"
         self.reload_items()

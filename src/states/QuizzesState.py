@@ -2,7 +2,6 @@ from functools import lru_cache
 from typing import Collection
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from quizlib.util import humanize_category_name
 
 from .RecommendationManager import RecommendationManager
 from ..database import session
@@ -63,7 +62,7 @@ class QuizCategoryState(CategoryState):
         quiz = get_quiz(self.items[self.item_number].id)
         if quiz.needs_subscription and not self.is_subscribed:
             return self.data["message403"]
-        self.print_recommendation()
+        self.recommendation_message = self.print_recommendation()
         self.selected_quiz = quiz
         res = [
             f'<a href="{quiz.image_url}">  </a>'

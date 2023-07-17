@@ -7,6 +7,7 @@ from ..database import session
 from ..models import Quiz, QuizAnswer
 from ..util import ReplyMarkupType
 from .BaseState import BaseState
+from quizlib.util import to_english_category_name
 
 
 @lru_cache
@@ -88,7 +89,7 @@ class QuizState(BaseState):
             action = f"{name}/{self.question_index-1}/goto:0"
             res.add(InlineKeyboardButton(text=self.buttons[-1][0], callback_data=action))
         else:
-            action = f"QuizCategory/{self.quiz.category}/show:{self.quiz.id}"
+            action = f"QuizCategory/{to_english_category_name(self.quiz.category)}/show:{self.quiz.id}"
             res.add(InlineKeyboardButton(text=self.buttons[-1][1], callback_data=action))
 
         return res

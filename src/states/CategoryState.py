@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from quizlib.util import to_english_category_name
 from ..models import User
 from .PageableState import PageableState
 
@@ -39,6 +39,7 @@ class CategoryState(PageableState):
         assert len(args) == 1
         self.start_button = self.category = args[0]
         self.start_button = self.start_button[:32]
+        # todo: translate name
         self.name = f"{self.name}/{self.category}"
         self.reload_items()
 

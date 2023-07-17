@@ -57,7 +57,7 @@ async def handle_message(message: types.Message):
                 text, reply_markup=state.get_buttons(), parse_mode=parse_mode)
 
     if state.need_recommendation and state.recommendation_message != "":
-        await bot.send_message(message.chat.id, state.recommendation_message)
+        await bot.send_message(message.chat.id, state.recommendation_message, disable_web_page_preview=True)
 
 
 if __name__ == "__main__":

@@ -1,17 +1,14 @@
 from abc import ABC
-
 from quizlib.models import Lesson
-from ..models import User
-from .CourseState import CourseState
-from .LikeableState import LikeableState
-from ..models import User
-from .BaseState import BaseState
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from ..util import ReplyMarkupType
 from functools import lru_cache
 from typing import Collection
-from ..models import Course
+
+from ..util import ReplyMarkupType
 from ..database import session
+from ..models import User, Course
+from .CourseState import CourseState
+from .LikeableState import LikeableState
 
 
 @lru_cache
