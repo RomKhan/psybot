@@ -1,5 +1,5 @@
-aiogram==2.22.2
-aiohttp==3.8.3
+aiogram
+aiohttp
 aiosignal==1.2.0
 async-timeout==4.0.2
 attrs==22.1.0
@@ -12,16 +12,11 @@ idna==3.4
 MarkupSafe==2.1.1
 multidict==6.0.2
 psycopg2-binary==2.9.5
-python-frontmatter==1.0.0
+python-frontmatter
 pytz==2022.6
 PyYAML==6.0
 quizlib @ git+ssh://git@github.com/psychological-essence/psychological_essence_quizlib.git
-SQLAlchemy==1.4.43
-Werkzeug==2.2.2
+SQLAlchemy
+Werkzeug
 yarl==1.8.1
-
-pip~=23.2
-wheel~=0.38.4
-setuptools~=65.5.1
-quizlib~=0.0.45
-Markdown~=3.4.3
+Markdown
