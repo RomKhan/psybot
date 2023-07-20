@@ -43,11 +43,9 @@ class FactState(PageableState):
         for f in body_dict:
             fact = Fact(id=f["id"], title=f["title"], content=f["content"])
             items.append(fact)
-        # return flatten(load_data_file("", "facts").values())
         return items
 
     def get_headline(self, fact: Fact) -> str:
-        # return fact.split("\n")[0].split(". ")[0]
         return fact.title
 
     def print_page(self) -> str:

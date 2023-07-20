@@ -77,7 +77,6 @@ class RecommendationManager:
             res.append(f'<a href="{t.article_url}">{t.title}</a>')
         return "\n".join(res)
 
-
     def get_courses_str(self) -> str:
         if len(self.courses) == 0:
             return ""

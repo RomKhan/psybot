@@ -79,6 +79,7 @@ class PageableState(ABC, BaseState):
             rng.shuffle(seq)
             return sorted(seq[:len(self.items)])
         else:
+            print(len(self.pageable_items))
             count = len(self.pageable_items)
             index = index % ceil(count / len(self.items))
             end = min((index + 1) * len(self.items), count)
