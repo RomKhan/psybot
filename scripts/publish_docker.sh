@@ -10,8 +10,8 @@ if ! pgrep dockerd; then
 fi
 
 ./scripts/build_docker.sh
-docker save psy-essence-bot | ssh -C psy-essence "docker load"
-ssh psy-essence "systemctl restart psybot.service"
+docker save psy-essence-bot | ssh -C root@psessence.ru "docker load"
+ssh root@psessence.ru "systemctl restart psybot.service"
 
 if [ ! -z "$dockerd_pid" ]; then
   kill -INT "$dockerd_pid"
