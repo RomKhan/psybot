@@ -49,7 +49,8 @@ async def handle_inline_keyboard(query: types.CallbackQuery):
 async def handle_message(message: types.Message):
     state = next_state_msg(message)
     text = state.get_message()
-    parse_mode = types.ParseMode.MARKDOWN if re.match(r"\ACourse*", state.name) is not None else types.ParseMode.HTML
+    parse_mode = types.ParseMode.MARKDOWN if re.match(r"\ACourse*", state.name) is not None \
+                                             or re.match(r"\AFacts*", state.name) is not None else types.ParseMode.HTML
     if len(text) > 4096:
         for x in range(0, len(text), 4096):
             await message.answer(

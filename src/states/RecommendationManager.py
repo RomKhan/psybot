@@ -99,7 +99,7 @@ class RecommendationManager:
             return ""
         res = ["\n<b>Интересные факты:</b>\n"]
         for fact in self.facts:
-            res.append(f"— {fact.title}")
+            res.append(f"— {fact.title.replace('*', '')}")
         return "\n".join(res)
 
     def get_message(self) -> str:
