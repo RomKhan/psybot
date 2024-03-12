@@ -3,10 +3,12 @@ from functools import lru_cache
 from quizlib.database import session
 
 from ..models import Course, Lesson, User
-from ..util import messages
+from ..util import messages, ReplyMarkupType
 from .PageableState import PageableState
+from aiogram.types import InlineKeyboardMarkup
 from .RecommendationManager import RecommendationManager
-
+from aiogram.types import KeyboardButton, InlineKeyboardButton
+from .QuizState import QuizState
 
 
 @lru_cache
@@ -14,13 +16,17 @@ def lessons_by_course(course: int) -> list[tuple[int, str]]:
     columns = [Lesson.id, Lesson.name]
     return session.query(*columns).where(Lesson.course_id == course).distinct().all()
 
+
 @lru_cache
 def get_lessons() -> list[tuple[int, str]]:
     columns = [Lesson.id, Lesson.name]
     return session.query(*columns).distinct().all()
+
+
 @lru_cache
 def get_lesson(id: int) -> Lesson:
     return session.query(Lesson).get(id)
+
 
 @lru_cache
 def get_course_by_name(name: str) -> Course:
@@ -36,13 +42,20 @@ class CourseState(PageableState, ABC):
     selected_lesson: Lesson | None = None
     items: list[tuple[int, str]]
     is_subscribed: bool
+    need_quiz_message = True
 
     def get_lesson(self) -> Lesson:
         return get_lesson(self.items[self.item_number][0])
 
     def get_items(self) -> list[tuple[int, str]]:
         self.course = get_course_by_name(self.course_name)
-        return get_lessons()
+        if self.course is not None:
+            return lessons_by_course(course=self.course.id)
+        else:
+            return []
+
+    def get_buttons(self) -> ReplyMarkupType:
+        return super().get_buttons()
 
     def mark_as_read(self, lesson: Lesson) -> None:
         lesson.view(self.user.id)
@@ -51,6 +64,8 @@ class CourseState(PageableState, ABC):
     def print_item(self) -> str:
         lesson = self.get_lesson()
         self.mark_as_read(lesson)
+        if lesson.description is None:
+            lesson.description = ''
 
         res = [
             lesson.name,
@@ -60,18 +75,32 @@ class CourseState(PageableState, ABC):
         return "\n\n".join(res)
 
     def print_recommendation(self) -> str:
-        try:
-            manager = RecommendationManager(self.course.id, "Course")
-            return manager.get_message().replace("{{STATE}}", "прохождения курса")
-        except (Exception,):
-            return ""
+        # todo:
+        # try:
+        #     manager = RecommendationManager(self.course.id, "Course")
+        #     return manager.get_message().replace("{{STATE}}", "прохождения курса")
+        # except (Exception,):
+        #     return ""
+        return ''
+
+    def get_buttons(self) -> ReplyMarkupType:
+        if self.selected_lesson:
+            # kb = super().get_buttons()
+            # btn = KeyboardButton('Пройти тест',callback_data=f'{self.name}/getQuiz:{self.selected_lesson.quiz_id}')
+            # btn = InlineKeyboardButton('Пройти тест', callback_data=f'{self.name}/getQuiz:{self.selected_lesson.quiz_id}')
+            btn = InlineKeyboardButton('Пройти тест', callback_data=f"{QuizState.name}/{self.selected_lesson.quiz_id}/0/start:0")
+            kb = InlineKeyboardMarkup([[btn]])
+            kb.row(btn)
+            return kb
+
+        return super().get_buttons()
 
     def get_message(self) -> str:
         lessons_cnt = len(lessons_by_course(course=self.course.id))
         if self.course.needs_subscription and not self.is_subscribed:
             return self.data["message403"]
 
-        if self.text == self.course_name:
+        if self.text == self.course_name or self.text == "Предыдущая страница" or self.text == "Текущая страница" or self.text == "Следующая страница":
                 res = [self.course.description,
                        "# Длительность: " + self.course.duration,
 

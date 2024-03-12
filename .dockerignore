@@ -6,4 +6,3 @@ __pycache__
 .github/
 .mypy_cache/
 .env
-.env

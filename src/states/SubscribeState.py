@@ -31,6 +31,7 @@ class SubscribeState(BaseState):
             self.url = generate_prodamus_link(user.id, email)  # type: ignore
             self.button = InlineKeyboardButton(text=self.buttons[0][1], url=self.url)
 
+    # todo: пофиксить после добавления функционала на сервер
     def get_message(self) -> str:
         if self.is_subscribed:
             cond = Order.user_id == self.user.id

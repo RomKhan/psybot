@@ -4,7 +4,7 @@
       "PLACEHOLDER"
     ],
     [
-      "В начало"
+      "\uD83D\uDEAA В начало"
     ]
   ],
   "inline_buttons": true,
@@ -12,6 +12,6 @@
   "transitions": {
     "/start": "Start",
     "PLACEHOLDER": "NotImplemented",
-    "В начало": "Start"
+    "\uD83D\uDEAA В начало": "Start"
   }
 }

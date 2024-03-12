@@ -19,7 +19,7 @@ def lst(arr: list[str], n: int) -> list[str]:
     return [random.choice(arr) for _ in range(n)]
 
 
-print(qizz_results("CharacterOfUser/AlienationMoralResponsibility", lst(arr, 24)))
+print(qizz_results("Характер, личностные качества/ImplicitTheoriesLearning", lst(arr, 24)))
 
 print("=" * 80)
 

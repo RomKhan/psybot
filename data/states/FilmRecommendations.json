@@ -2,19 +2,23 @@
   "buttons": [
     [
       "Предыдущая страница",
-      "Случайный фильм",
+      "Текущая страница",
       "Следующая страница"
     ],
     [
-      "Назад"
+      "\uD83C\uDFB2 Случайный фильм"
+    ],
+    [
+      "❌ Назад"
     ]
   ],
   "message": "У нас много полезных фильмов! Введите число 1 до {{COUNT}} или выберете случайный фильм\nНаши рекомендации:",
   "transitions": {
     "/start": "Start",
-    "Назад": "Recommendations",
+    "❌ Назад": "Recommendations",
     "Предыдущая страница": "FilmRecommendations",
     "Следующая страница": "FilmRecommendations",
-    "Случайный фильм": "FilmRecommendations"
+    "Текущая страница": "FilmRecommendations",
+    "\uD83C\uDFB2 Случайный фильм": "FilmRecommendations"
   }
 }

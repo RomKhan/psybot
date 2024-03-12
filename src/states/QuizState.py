@@ -23,6 +23,7 @@ class QuizState(BaseState):
     num_questions: int
     ans: QuizAnswer | None
     inline_answers: bool
+    random_button = None
 
     def set_substate(self, *args: str) -> None:
         assert len(args) == 2
@@ -89,7 +90,7 @@ class QuizState(BaseState):
             action = f"{name}/{self.question_index-1}/goto:0"
             res.add(InlineKeyboardButton(text=self.buttons[-1][0], callback_data=action))
         else:
-            action = f"QuizCategory/{to_english_category_name(self.quiz.category)}/show:{self.quiz.id}"
+            action = f"QuizCategory/{self.quiz.category[:20]}/show:{self.quiz.id}"
             res.add(InlineKeyboardButton(text=self.buttons[-1][1], callback_data=action))
 
         return res

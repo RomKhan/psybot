@@ -6,8 +6,9 @@ from ..models import Technique
 from ..util import ReplyMarkupType
 from .ArticleState import ArticleCategoryState
 from .CategoryState import Categorizable
-from .LikeableState import LikeableState
-from .RecommendationManager import RecommendationManager
+from .LikeableState import LikeableState, BaseModel
+from .BaseState import BaseState
+from aiogram.types import InlineKeyboardMarkup
 
 
 @lru_cache
@@ -26,7 +27,7 @@ def techniques_by_cat(category: str, subscription: bool = False) -> list[Categor
     return [
         Categorizable(id, cat, title, sub)
         for id, cat, title, sub in list_techniques()
-        if cat == category and (subscription or not sub)
+        if cat.startswith(category) and (subscription or not sub)
     ]
 
 
@@ -37,17 +38,12 @@ def get_technique(id: int) -> Technique:
 
 class TechniqueCategoryState(ArticleCategoryState):
     name = "TechniqueCategory"
-    random_button = "Случайная техника"
+    random_button = "🎲 Случайная техника"
     item_name = "Техника"
+    reco_name = "Technique"
+    reco_placeholder = 'ознакомления с техникой'
 
     selected_article: Technique | None
-
-    def print_recommendation(self) -> str:
-        try:
-            manager = RecommendationManager(self.selected_article.id, "Technique")
-            return manager.get_message().replace("{{STATE}}", "ознакомления с техникой")
-        except (Exception,):
-            return ""
 
     def get_items(self) -> list[Categorizable]:
         return techniques_by_cat(self.category, self.user.is_subscribed())
@@ -71,3 +67,9 @@ class TechniqueState(LikeableState):
 
     def get_item(self, id: int) -> Technique:
         return get_technique(id)
+
+    @classmethod
+    def likes_keyboard(cls, item: BaseModel) -> InlineKeyboardMarkup:
+        res = super(TechniqueState, cls).likes_keyboard(item)
+        res.row(BaseState.get_recomendation_button(f"TechniqueCategory/{item.category[:20]}", item.id))
+        return res

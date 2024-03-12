@@ -1,14 +1,14 @@
 {
   "buttons": [
     [
-      "В начало"
+      "\uD83D\uDEAA В начало"
     ]
   ],
   "inline_buttons": true,
   "message": "Для обращений или оставления отзыва вы можете написать на почту ivanmonicomp@gmail.com",
   "transitions": {
     "/start": "Start",
-    "В начало": "Start",
+    "\uD83D\uDEAA В начало": "Start",
     "Подписка": "Subscribe",
     "Приложение": "AppDownload",
     "Рекомендации": "Recommendations",

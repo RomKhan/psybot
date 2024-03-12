@@ -1,21 +1,21 @@
 {
   "buttons": [
     [
-      "Книги",
-      "Фильмы",
-      "Сериалы"
+      "\uD83D\uDCD6 Книги",
+      "\uD83C\uDFAC Фильмы",
+      "\uD83D\uDCFA Сериалы"
     ],
     [
-      "В начало"
+      "\uD83D\uDEAA В начало"
     ]
   ],
   "inline_buttons": true,
   "message": "Не знаете что еще прочесть или посмотреть по психологии? Выбирайте категорию и мы поможем вам не заскучать в свободный вечер",
   "transitions": {
     "/start": "Start",
-    "В начало": "Start",
-    "Книги": "BookRecommendations",
-    "Сериалы": "SeriesRecommendations",
-    "Фильмы": "FilmRecommendations"
+    "\uD83D\uDEAA В начало": "Start",
+    "\uD83D\uDCD6 Книги": "BookRecommendations",
+    "\uD83D\uDCFA Сериалы": "SeriesRecommendations",
+    "\uD83C\uDFAC Фильмы": "FilmRecommendations"
   }
 }

@@ -4,9 +4,9 @@
       "PLACEHOLDER"
     ],
     [
-      "Предыдущий вопрос",
-      "Назад",
-      "Завершить тест"
+      "\uD83D\uDD3A Предыдущий вопрос",
+      "❌ Назад",
+      "\uD83C\uDF89 Завершить тест"
     ]
   ],
   "inline_buttons": true,
@@ -14,6 +14,6 @@
   "transitions": {
     "/start": "Start",
     "PLACEHOLDER": "NotImplemented",
-    "Назад": "THIS"
+    "❌ Назад": "THIS"
   }
 }

@@ -2,19 +2,23 @@
   "buttons": [
     [
       "Предыдущая страница",
-      "Случайная книга",
+      "Текущая страница",
       "Следующая страница"
     ],
     [
-      "Назад"
+      "\uD83C\uDFB2 Случайная книга"
+    ],
+    [
+      "❌ Назад"
     ]
   ],
   "message": "Наиболее интересные книги по психологии! Введите число 1 до {{COUNT}} или выберете случайную книга\nНаши рекомендации:",
   "transitions": {
     "/start": "Start",
-    "Назад": "Recommendations",
+    "❌ Назад": "Recommendations",
     "Предыдущая страница": "BookRecommendations",
     "Следующая страница": "BookRecommendations",
-    "Случайная книга": "BookRecommendations"
+    "Текущая страница": "BookRecommendations",
+    "\uD83C\uDFB2 Случайная книга": "BookRecommendations"
   }
 }

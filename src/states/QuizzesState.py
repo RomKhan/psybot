@@ -3,13 +3,13 @@ from typing import Collection
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from .RecommendationManager import RecommendationManager
 from ..database import session
 from ..models import Quiz
 from ..util import ReplyMarkupType
 from .CategoryState import Categorizable, CategoryState
 from .LikeableState import BaseModel, LikeableState
 from .QuizState import QuizState
+from .BaseState import BaseState
 
 
 @lru_cache
@@ -28,7 +28,7 @@ def quizzes_by_cat(category: str) -> list[Categorizable]:
     return [
         Categorizable(id, cat, title, sub)
         for id, cat, title, sub in list_quizzes()
-        if cat == category
+        if cat.startswith(category)
     ]
 
 
@@ -39,33 +39,24 @@ def get_quiz(id: int) -> Quiz:
 
 class QuizCategoryState(CategoryState):
     name = "QuizCategory"
-    random_button = "Случайный тест"
+    random_button = "🎲 Случайный тест"
     item_name = "Тест"
+    reco_name = "Quiz"
+    reco_placeholder = 'прохождения теста'
 
     selected_quiz: Quiz | None = None
 
     def get_message(self) -> str:
-        # category = humanize_category_name(self.category)
         return super().get_message().replace(self.category, self.category)
 
     def get_items(self) -> list[Categorizable]:
         return quizzes_by_cat(self.category)
 
-    def print_recommendation(self) -> str:
-        try:
-            manager = RecommendationManager(self.selected_quiz.id, "Quiz")
-            return manager.get_message().replace("{{STATE}}", "прохождения теста")
-        except (Exception,):
-            return ""
-
     def print_item(self) -> str:
         quiz = get_quiz(self.items[self.item_number].id)
         if quiz.needs_subscription and not self.is_subscribed:
             return self.data["message403"]
-        self.need_recommendation = True
         self.selected_quiz = quiz
-        self.recommendation_message = self.print_recommendation()
-        self.need_recommendation = True
         res = [
             f'<a href="{quiz.image_url}">  </a>'
             f"{self.item_name} №{self.item_number+1} в категории «{self.category}»",
@@ -78,7 +69,8 @@ class QuizCategoryState(CategoryState):
     def get_buttons(self) -> ReplyMarkupType:
         # todo: use both keyboards
         if self.selected_quiz:
-            return QuizzesState.likes_keyboard(self.selected_quiz)
+            kb = QuizzesState.likes_keyboard(self.selected_quiz)
+            return kb
 
         return super().get_buttons()
 
@@ -117,4 +109,5 @@ class QuizzesState(LikeableState):
         res = super(QuizzesState, cls).likes_keyboard(item)
         action = f"{QuizState.name}/{item.id}/0/start:0"
         res.row(InlineKeyboardButton(text="Начать", callback_data=action))
+        res.row(BaseState.get_recomendation_button(f"QuizCategory/{item.category[:20]}", item.id))
         return res

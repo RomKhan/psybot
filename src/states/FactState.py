@@ -1,10 +1,9 @@
 import json
-import markdown
 import urllib.request
 
-from .RecommendationManager import RecommendationManager
-from ..util import flatten, load_data_file
 from .PageableState import PageableState
+from ..util import ReplyMarkupType
+from aiogram.types import InlineKeyboardMarkup
 
 URL = "https://psessence.ru/extapi/facts"
 
@@ -24,16 +23,12 @@ class Fact:
 
 
 class FactState(PageableState):
-    def print_recommendation(self) -> str:
-        try:
-            manager = RecommendationManager(self.items[self.item_number].id, "Fact")
-            return manager.get_message().replace("{{STATE}}", "прочтения статьи")
-        except (Exception,):
-            return ""
-
     name = "Facts"
-    random_button = "Случайный факт"
-    start_button = "Факты"
+    reco_name = "Fact"
+    reco_placeholder = 'прочтения статьи'
+    random_button = "🎲 Случайный факт"
+    start_button = "💯 Факты"
+    selected_fact: Fact | None = None
 
     def get_items(self) -> list[Fact]:
         items = list[Fact]()
@@ -45,18 +40,23 @@ class FactState(PageableState):
             items.append(fact)
         return items
 
+    def get_buttons(self) -> ReplyMarkupType:
+        if self.selected_fact:
+            kb = InlineKeyboardMarkup(inline_keyboard=[[self.get_recomendation_button(self.name, self.selected_fact.id)]])
+            return kb
+
+        return super().get_buttons()
+
     def get_headline(self, fact: Fact) -> str:
         return fact.title
 
     def print_page(self) -> str:
         res = []
         for i, headline in self.get_page(self.page_number):
-            if (i + 1) % 5 == 0:
-                res.append(f"{i+1}. {headline}")
+            res.append(f"{i+1}. {headline}")
         return "\n".join(res)
 
     def print_item(self) -> str:
-        self.recommendation_message = self.print_recommendation()
-        self.need_recommendation = True
+        self.selected_fact = self.items[self.item_number]
         return f"Факт №{self.item_number+1}\n\n{self.items[self.item_number].title}" \
                f"\n\n{self.items[self.item_number].content.replace('<', '').replace('>', '')}"

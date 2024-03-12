@@ -1,14 +1,14 @@
 {
   "buttons": [
     [
-      "Назад",
-      "В начало"
+      "❌ Назад",
+      "\uD83D\uDEAA В начало"
     ]
   ],
   "message": "Вход выполнен! Мы рады что вы с нами ❤",
   "transitions": {
     "/start": "Start",
-    "В начало": "Start",
-    "Назад": "Subscribe"
+    "\uD83D\uDEAA В начало": "Start",
+    "❌ Назад": "Subscribe"
   }
 }

@@ -4,8 +4,8 @@ from .PageableState import PageableState
 
 class FilmRecommendationState(PageableState):
     name = "FilmRecommendations"
-    random_button = "Случайный фильм"
-    start_button = "Фильмы"
+    random_button = "🎲 Случайный фильм"
+    start_button = "🎬 Фильмы"
 
     items: list[tuple[str, str]]
 
@@ -18,3 +18,6 @@ class FilmRecommendationState(PageableState):
     def print_item(self) -> str:
         book = self.items[self.item_number]
         return f"Рекомендация фильма №{self.item_number+1}\n\n{book[0]}\n\n{book[1]}"
+
+    def print_recommendation(self) -> str:
+        return ""

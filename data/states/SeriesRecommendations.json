@@ -2,19 +2,23 @@
   "buttons": [
     [
       "Предыдущая страница",
-      "Случайный сериал",
+      "Текущая страница",
       "Следующая страница"
     ],
     [
-      "Назад"
+      "\uD83C\uDFB2 Случайный сериал"
+    ],
+    [
+      "❌ Назад"
     ]
   ],
   "message": "Отличные сериалы для просмотра на выходных. Введите число 1 до {{COUNT}} или выберете случайный сериал\nНаши рекомендации:",
   "transitions": {
     "/start": "Start",
-    "Назад": "Recommendations",
+    "❌ Назад": "Recommendations",
     "Предыдущая страница": "SeriesRecommendations",
     "Следующая страница": "SeriesRecommendations",
-    "Случайный сериал": "SeriesRecommendations"
+    "Текущая страница": "SeriesRecommendations",
+    "\uD83C\uDFB2 Случайный сериал": "SeriesRecommendations"
   }
 }

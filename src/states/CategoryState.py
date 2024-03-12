@@ -15,9 +15,6 @@ class Categorizable:
 
 class CategoryState(PageableState, ABC):
 
-    def print_recommendation(self) -> str:
-        pass
-
     category: str
     start_button = ""
     is_random = False

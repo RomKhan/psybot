@@ -4,13 +4,13 @@
       "https://psychological-essence.github.io/PsychologicalEssence.apk"
     ],
     [
-      "В начало"
+      "\uD83D\uDEAA В начало"
     ]
   ],
   "inline_buttons": true,
   "message": "Мы создали еще и приложение, будем рады видеть вас там! К сожалению, сейчас оно доступно только обладателям Android, но мы работаем над этим и в скором времени ситуация изменится. Для установки на смартфон перейдите по ссылке и разрешите установку",
   "transitions": {
     "/start": "Start",
-    "В начало": "Start"
+    "\uD83D\uDEAA В начало": "Start"
   }
 }

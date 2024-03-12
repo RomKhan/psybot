@@ -6,7 +6,7 @@ if [ -z "$SSH_AGENT_PID" ]; then
   clean_ssh_agent=true
 fi
 
-DOCKER_BUILDKIT=1 docker build -t psy-essence-bot --ssh default .
+DOCKER_BUILDKIT=1 docker build --platform linux/amd64 -t psy-essence-bot --ssh default .
 
 if [ ! -z "$clean_ssh_agent" ]; then
   eval `ssh-agent -k`

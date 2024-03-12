@@ -24,6 +24,7 @@ class BaseState:
     one_time_keyboard: bool
     data: dict[str, Any]
     need_recommendation = False
+    need_quiz_message = False
     recommendation_message = ""
 
     def __init__(self, user: User, text: str) -> None:
@@ -93,3 +94,9 @@ class BaseState:
 
     def action(self, action: str, pram: int) -> None:
         print(f"\x1b[31mWARNING\x1b[0m: unsupported action {action}:{pram} for state {self.name}")
+
+    @staticmethod
+    def get_recomendation_button(name, id):
+        action = f'{name[:31]}/getRecs:{id}'
+        btn = InlineKeyboardButton(text="Посмотреть рекомендации", callback_data=action)
+        return btn

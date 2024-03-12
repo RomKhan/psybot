@@ -1,4 +1,4 @@
-aiogram
+aiogram==2.23.1
 aiohttp
 aiosignal==1.2.0
 async-timeout==4.0.2
@@ -15,6 +15,7 @@ psycopg2-binary==2.9.5
 python-frontmatter
 pytz==2022.6
 quizlib @ git+ssh://git@github.com/psychological-essence/psychological_essence_quizlib.git
+python-dotenv
 SQLAlchemy
 Werkzeug
 yarl==1.8.1
