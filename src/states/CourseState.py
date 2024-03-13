@@ -75,19 +75,10 @@ class CourseState(PageableState, ABC):
         return "\n\n".join(res)
 
     def print_recommendation(self) -> str:
-        # todo:
-        # try:
-        #     manager = RecommendationManager(self.course.id, "Course")
-        #     return manager.get_message().replace("{{STATE}}", "прохождения курса")
-        # except (Exception,):
-        #     return ""
         return ''
 
     def get_buttons(self) -> ReplyMarkupType:
-        if self.selected_lesson:
-            # kb = super().get_buttons()
-            # btn = KeyboardButton('Пройти тест',callback_data=f'{self.name}/getQuiz:{self.selected_lesson.quiz_id}')
-            # btn = InlineKeyboardButton('Пройти тест', callback_data=f'{self.name}/getQuiz:{self.selected_lesson.quiz_id}')
+        if self.selected_lesson and self.selected_lesson.quiz_id is not None:
             btn = InlineKeyboardButton('Пройти тест', callback_data=f"{QuizState.name}/{self.selected_lesson.quiz_id}/0/start:0")
             kb = InlineKeyboardMarkup([[btn]])
             kb.row(btn)

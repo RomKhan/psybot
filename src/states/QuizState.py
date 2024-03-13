@@ -27,7 +27,10 @@ class QuizState(BaseState):
 
     def set_substate(self, *args: str) -> None:
         assert len(args) == 2
-        self.quiz = get_quiz(int(args[0]))
+        if args[0] is not None:
+            self.quiz = get_quiz(int(args[0]))
+        else:
+            self.quiz = None
         self.question_index = int(args[1])
         self.num_questions = max(len(self.quiz.questions), len(self.quiz.answers))  # type: ignore
         self.name = f"{self.name}/{self.quiz.id}/{self.question_index}"
